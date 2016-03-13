@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+ 
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+      <property name="prefix" value="/jsp/"/>
+      <property name="suffix" value=".jsp"/>
+  </bean>   
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" 
+        destroy-method="close">
+       <!-- <property name="jndiName" value="java:comp/env/jdbc/PedidosDS"/> --> 
+       <property name="jndiName" value="jdbc/PedidosDS"/> 
+  </bean>
+  
+  <bean id="dao.PlazasDao" class="com.seven_eleven.merlin.dao.impl.PlazasDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+
+  <bean id="dao.MercadosDao" class="com.seven_eleven.merlin.dao.impl.MercadosDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+  
+  <bean id="dao.CamposDao" class="com.seven_eleven.merlin.dao.impl.CamposDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+ 
+  <bean id="dao.PerfilesTdaDao" class="com.seven_eleven.merlin.dao.impl.PerfilesTdaDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+
+  <bean id="dao.TiendasDao" class="com.seven_eleven.merlin.dao.impl.TiendasDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+  
+  <bean id="dao.CategoriasArtDao" class="com.seven_eleven.merlin.dao.impl.CategoriasArtDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+  
+  <bean id="dao.ArticulosDao" class="com.seven_eleven.merlin.dao.impl.ArticulosDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+    
+  <bean id="dao.FinalizarDao" class="com.seven_eleven.merlin.dao.impl.FinalizarDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+     
+  <bean id="dao.PedidosDao" class="com.seven_eleven.merlin.dao.impl.PedidosDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+     
+  <bean id="dao.ResumenesDao" class="com.seven_eleven.merlin.dao.impl.ResumenesDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>  
+
+  <bean id="dao.ExcepcionDao" class="com.seven_eleven.merlin.dao.impl.ExcepcionDao">
+        <property name="dataSource" ref="dataSource" />        
+  </bean>
+
+ 
+  <bean id="service.PlazasService" class="com.seven_eleven.merlin.service.impl.PlazasService">
+        <property name="dao" ref="dao.PlazasDao"/>        
+  </bean>
+
+  <bean id="service.MercadosService" class="com.seven_eleven.merlin.service.impl.MercadosService">
+        <property name="dao" ref="dao.MercadosDao"/>        
+  </bean>
+ 
+   <bean id="service.CamposService" class="com.seven_eleven.merlin.service.impl.CamposService">
+        <property name="dao" ref="dao.CamposDao"/>        
+  </bean>
+   
+  <bean id="service.PerfilesTdaService" class="com.seven_eleven.merlin.service.impl.PerfilesTdaService">
+        <property name="dao" ref="dao.PerfilesTdaDao"/>        
+  </bean>
+  
+  <bean id="service.TiendasService" class="com.seven_eleven.merlin.service.impl.TiendasService">
+        <property name="dao" ref="dao.TiendasDao"/>        
+  </bean>
+  
+  <bean id="service.CategoriasArtService" class="com.seven_eleven.merlin.service.impl.CategoriasArtService">
+        <property name="dao" ref="dao.CategoriasArtDao"/>        
+  </bean>
+  
+  <bean id="service.ArticulosService" class="com.seven_eleven.merlin.service.impl.ArticulosService">
+        <property name="dao" ref="dao.ArticulosDao"/>        
+  </bean>  
+  
+  <bean id="service.FinalizarService" class="com.seven_eleven.merlin.service.impl.FinalizarService">
+        <property name="dao" ref="dao.FinalizarDao"/>        
+  </bean>
+      
+  <bean id="service.PedidosService" class="com.seven_eleven.merlin.service.impl.PedidosService">
+        <property name="dao" ref="dao.PedidosDao"/>        
+  </bean>
+   
+  <bean id="service.ResumenesService" class="com.seven_eleven.merlin.service.impl.ResumenesService">
+        <property name="dao" ref="dao.ResumenesDao"/>        
+  </bean> 
+  
+  <bean id="service.ExcepcionService" class="com.seven_eleven.merlin.service.impl.ExcepcionService">
+        <property name="dao" ref="dao.ExcepcionDao"/>        
+  </bean>     
+  
+  <bean name="/plazas/*" class="com.seven_eleven.merlin.web.controllers.PlazasController">
+  <property name="service" ref="service.PlazasService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Plaza
+	    </value>
+   </property>    
+  </bean>  
+  
+  <bean name="/mercados/*" class="com.seven_eleven.merlin.web.controllers.MercadosController">
+  <property name="service" ref="service.MercadosService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Mercado
+	    </value>
+   </property>    
+  </bean>
+  
+  <bean name="/campos/*" class="com.seven_eleven.merlin.web.controllers.CamposController">
+  <property name="service" ref="service.CamposService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Campo
+	    </value>
+   </property>    
+  </bean>
+  
+   
+  <bean name="/perfilesTda/*" class="com.seven_eleven.merlin.web.controllers.PerfilesTdaController">
+   <property name="service" ref="service.PerfilesTdaService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.PerfilTda
+	    </value>
+   </property>    
+  </bean>  
+  
+  <bean name="/tiendas/*" class="com.seven_eleven.merlin.web.controllers.TiendasController">
+   <property name="service" ref="service.TiendasService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Tienda
+	    </value>
+   </property>    
+  </bean>  
+  
+  <bean name="/categoriasArt/*" class="com.seven_eleven.merlin.web.controllers.CategoriasArtController">
+   <property name="service" ref="service.CategoriasArtService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.CategoriaArt
+	    </value>
+   </property>    
+  </bean>  
+  
+  <bean name="/articulos/*" class="com.seven_eleven.merlin.web.controllers.ArticulosController">
+   <property name="service" ref="service.ArticulosService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Articulo
+	    </value>
+   </property>    
+  </bean>  
+    
+  <bean name="/finalizar/*" class="com.seven_eleven.merlin.web.controllers.FinalizarController">
+   <property name="service" ref="service.FinalizarService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Finalizar
+	    </value>
+   </property>    
+  </bean>     
+  
+  <bean name="/pedidos/*" class="com.seven_eleven.merlin.web.controllers.PedidosController">
+   <property name="service" ref="service.PedidosService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Pedido
+	    </value>
+   </property>
+  </bean>
+  
+  <bean name="/tipospedido/*" class="com.seven_eleven.merlin.web.controllers.TiposPedidoController">
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.TipoPedido
+	    </value>
+   </property>
+  </bean>
+  
+  <bean name="/estatus/*" class="com.seven_eleven.merlin.web.controllers.EstatusController">
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Estatus
+	    </value>
+   </property>
+  </bean>
+  
+  <bean name="/resumenes/*" class="com.seven_eleven.merlin.web.controllers.ResumenesController">
+  <property name="service" ref="service.ResumenesService"/>
+   <property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Resumen
+	    </value>
+   </property>
+  </bean>
+
+  <bean name="/excepcion/*" class="com.seven_eleven.merlin.web.controllers.ExcepcionController">
+  	<property name="service" ref="service.ExcepcionService"/>
+   	<property name="commandClass">
+	   <value type="java.lang.Class">
+	    com.seven_eleven.merlin.domain.Excepcion
+	    </value>
+   	</property>    
+  </bean>     
+
+</beans>
