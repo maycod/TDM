@@ -1,7 +1,14 @@
+@font-face {
+    font-family: dtchFont;
+    font-size: 100%;
+    src: url(../fonts/GLSNECB.ttf);
+}
+
 body {
+  font-family: dtchFont;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #eee;
+  background-color: rgb(206,12,32);
 }
 
 .form-signin {

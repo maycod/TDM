@@ -1,11 +1,11 @@
 <%@ page import="java.io.*,java.util.*,javax.servlet.http.HttpSession"%>
 <%
-	session=request.getSession();  
+	/*session=request.getSession();  
 	String  username = (String)session.getAttribute("username");
 	if (username == null){
 		response.sendRedirect("../login.jsp");	
 	}
-	String  profile = (String)session.getAttribute("profile");
+	String  profile = (String)session.getAttribute("profile");*/
 
 %>
 <html lang="en">
@@ -17,7 +17,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>SISS</title>
+<title>TDM</title>
 <!-- jQuery -->
 <script src="../js/jquery.js"></script>
 
@@ -89,12 +89,12 @@ $(document).ready(function($){
 				</button>
 				<img class="navbar-brand-img" src="../images/photos/LogoIndex.png"
 					alt="Formacion Social"> <a class="navbar-center navbar-brand"
-					href="index.jsp">Sistema Informativo del Servicio Social</a>
+					href="index.jsp">ToDo Manager</a>
 			</div>
 			<!-- Top Menu Items -->
 			<ul class="nav navbar-right top-nav">
 				<li class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown"><i class="fa fa-user"></i> <%=username%>
+					data-toggle="dropdown"><i class="fa fa-user"></i> 
 						<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="cambiarClave.jsp"><i
@@ -107,14 +107,8 @@ $(document).ready(function($){
 			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-					<li><a href="alumnos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i> Alumnos Destacados </a></li>
-					<li><a href="grupos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i> Grupos Estudiantiles
-							Destacados</a></li>
-					<li><a href="proyectos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Proyectos</a></li>
-					<li style="display: none;" id="tabUsuarios"><a
+					
+					<li style="display: block;" id="tabUsuarios"><a
 						href="usuarios.jsp"><i class="fa fa-fw fa-bar-chart-o"></i>Usuarios</a>
 					</li>
 				</ul>
@@ -133,10 +127,7 @@ $(document).ready(function($){
 							!Bienvenido! <small></small>
 						</h1>
 						<ol class="breadcrumb">
-							<li class="active">En el Tecnológico de Monterrey
-								desarrollamos tu potencial profesional y humano porque te
-								ofrecemos el nivel académico, los recursos y los programas
-								académicos de excelencia.</li>
+							<li class="active">Lorem ipsum</li>
 						</ol>
 					</div>
 				</div>
@@ -145,45 +136,7 @@ $(document).ready(function($){
 			<!-- /.container-fluid -->
 				<div class="container">
 					<br>
-					<div id="myCarousel" class="carousel slide" data-ride="carousel">
-						<!-- Indicators -->
-						<ol class="carousel-indicators">
-							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-							<li data-target="#myCarousel" data-slide-to="1"></li>
-							<li data-target="#myCarousel" data-slide-to="2"></li>
-							<li data-target="#myCarousel" data-slide-to="3"></li>
-						</ol>
-	
-						<!-- Wrapper for slides -->
-						<div class="carousel-inner" role="listbox">
-							<div class="item active">
-								<img src="../images/photos/rectoria.jpg" alt="Chania" width="460" height="345">
-							</div>
-	
-							<div class="item">
-								<img src="../images/photos/rectoria.jpg" alt="Chania" width="460" height="345">
-							</div>
-	
-							<div class="item">
-								<img src="../images/photos/rectoria.jpg" alt="Flower" width="460" height="345">
-							</div>
-	
-							<div class="item">
-								<img src="../images/photos/rectoria.jpg" alt="Flower" width="460" height="345">
-							</div>
-						</div>
-	
-						<!-- Left and right controls -->
-						<a class="left carousel-control" href="#myCarousel" role="button"
-							data-slide="prev"> <span
-							class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-							<span class="sr-only">Previous</span>
-						</a> <a class="right carousel-control" href="#myCarousel" role="button"
-							data-slide="next"> <span
-							class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-							<span class="sr-only">Next</span>
-						</a>
-					</div>
+					
 				</div>
 			</div>
 		<!-- /#page-wrapper -->
@@ -192,7 +145,7 @@ $(document).ready(function($){
 	<!-- /#wrapper -->
 
 
-	<label id="profile" style="display: none;"><%=profile%></label>
+	<label id="profile" style="display: none;"></label>
 	<br>
 	
 </body>

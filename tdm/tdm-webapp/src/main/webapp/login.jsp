@@ -8,12 +8,11 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>SISS - Iniciar Sesión</title>
+<title>TDM - Iniciar Sesión</title>
 <!-- Bootstrap Core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/signin.css" rel="stylesheet">
 <!-- Custom CSS -->
-<link href="css/sb-admin.css" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"
 	type="text/css">
@@ -27,11 +26,11 @@
 
 %>
 </head>
-<body style="background-color:#FFFFFF;margin-top:0px;">
+<body style="margin-top:0px;">
 	<div class="container">
 		<form class="form-signin" action="LoginServlet" method="post">
-			<h2 class="form-signin-heading" style="text-align:center; color:rgb(0, 0, 153);">Sistema Informativo del Servicio Social</h2>
-			<div style="text-align:center;"><img src="images/photos/loginLogo.jpg" alt="Formacion Social"></div>
+			<h2 class="form-signin-heading" style="text-align:center; color:#fff; font-size: 100pt;">dotech</h2>
+			<div style="text-align:center;"><img src="images/photos/dtchLogo250.png" alt="Formacion Social"></div>
 			<p><br></br></p>
 			<input type="text" name="inputUsername" class="form-control"
 				placeholder="Nombre de Usuario" required autofocus> 
