@@ -11,7 +11,7 @@ CREATE OR REPLACE PACKAGE SIADM.PKG_SISTEMA_INFORMATIVO_SS AS
 ******************************************************************************/
 
     TYPE REF_CURSOR IS REF CURSOR;
- 
+
     -- Obtiene listado de usuarios
     PROCEDURE SP_GET_LIST_USERS (
         c_resultados OUT REF_CURSOR
@@ -155,7 +155,7 @@ CREATE OR REPLACE PACKAGE SIADM.PKG_SISTEMA_INFORMATIVO_SS AS
         p_studentId IN NUMBER,
         p_associationId IN NUMBER
     );
-    
+
     -- Elimina relacion estudiante - grupo estudiantil
     PROCEDURE SP_DEL_REL_STU_ASSOC(
         p_studentId IN NUMBER,
@@ -175,7 +175,7 @@ CREATE OR REPLACE PACKAGE SIADM.PKG_SISTEMA_INFORMATIVO_SS AS
         p_memberType IN NUMBER,
         p_projectId IN NUMBER
     );
-    
+
     -- Elimina  relacion miembro - proyecto
     PROCEDURE SP_DEL_REL_MEMB_PROJ(
         p_memberId IN NUMBER,
@@ -186,7 +186,7 @@ CREATE OR REPLACE PACKAGE SIADM.PKG_SISTEMA_INFORMATIVO_SS AS
   END PKG_SISTEMA_INFORMATIVO_SS;
 /
 
-CREATE OR REPLACE PACKAGE BODY SIADM.PKG_SISTEMA_INFORMATIVO_SS AS
+CREATE OR REPLACE PACKAGE BODY ADMTDM.PKG_SISTEMA_INFORMATIVO_SS AS
 
 v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
 
@@ -196,11 +196,11 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT USR.ID_USER, USR.USERNAME, USR.ID_PROFILE, PRO.DESC_PROFILE, USR.CREATION_DATE 
-        FROM SIADM.USERS USR, SIADM.PROFILES PRO 
-        WHERE USR.ACTIVE = 1 AND USR.ID_PROFILE = PRO.ID_PROFILE;
-    
+        OPEN c_resultados FOR
+        SELECT USR.ID_USUARIO, USR.CVE_USUARIO, USR.TIPO_USUARIO, PRO.DESC_TIPO_USUARIO ,USR.FECHA_CREACION
+        FROM ADMTDM.TDM_CAT_USUARIO USR, PRO.TDM_CAT_TIPO_USUARIO PRO
+        WHERE USR.INDICADOR = 1 AND USR.TIPO_USUARIO = PRO.TIPO_USUARIO;
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -216,12 +216,12 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT USR.ID_USER, USR.USERNAME, USR.ID_PROFILE, PRO.DESC_PROFILE, USR.CREATION_DATE 
-        FROM SIADM.USERS USR, SIADM.PROFILES PRO 
-        WHERE USR.ACTIVE = 1 AND USR.ID_PROFILE = PRO.ID_PROFILE
-        AND USR.ID_USER= p_id_user;
-    
+        OPEN c_resultados FOR
+        SELECT USR.ID_USERUARIO, USR.CVE_USUARIO,USR.TIPO_USUARIO,PRO.DESC_TIPO_USUARIO ,USR.FECHA_CREACION
+        FROM DMTDM.TDM_CAT_USUARIO USR, PRO.TDM_CAT_TIPO_USUARIO PRO
+        WHERE USR.INDICADOR = 1 AND USR.TIPO_USUARIO = PRO.TIPO_USUARIO
+        AND USR.ID_USUARIO= p_id_user;
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -237,28 +237,28 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_username IN VARCHAR2,
         p_profileId IN NUMBER,
         p_userModify IN VARCHAR2
-    ) IS 
+    ) IS
         v_id_next_val NUMBER;
     BEGIN
-  
-        SELECT COALESCE(MAX(ID_USER),0)+1 INTO v_id_next_val FROM SIADM.USERS;
-        MERGE INTO SIADM.USERS USR
+
+        SELECT COALESCE(MAX(ID_USUARIO),0)+1 INTO v_id_next_val FROM DMTDM.TDM_CAT_USUARIO;
+        MERGE INTO SDMTDM.TDM_CAT_USUARIO USR
         USING
-        (   SELECT p_userId AS ID_USER, p_username AS USERNAME, p_profileId AS ID_PROFILE, p_userModify AS USER_MODIFY
+        (   SELECT p_userId AS ID_USUARIO, p_username AS CVE_USUARIO, p_profileId AS TIPO_USUARIO ,p_userModify AS ID_USUARIO_MODIFICACION
             FROM DUAL) TEMP
         ON
-        (  TEMP.ID_USER = USR.ID_USER )
+        (  TEMP.ID_USUARIO = USR.ID_USUARIO )
         WHEN MATCHED THEN
             UPDATE SET
-                USR.USERNAME = TEMP.USERNAME,
-                USR.ID_PROFILE = TEMP.ID_PROFILE,
-                USR.USER_MODIFY = TEMP.USER_MODIFY
+                USR.CVE_USUARIO = TEMP.CVE_USUARIO,
+                USR.TIPO_USUARIO = TEMP.TIPO_USUARIO,
+                USR.ID_USUARIO_MODIFICACION = TEMP.ID_USUARIO_MODIFICACION
         WHEN NOT MATCHED THEN
-            INSERT (ID_USER, USERNAME, PASSWORD, ID_PROFILE, ACTIVE, USER_MODIFY, CREATION_DATE)
-            VALUES( v_id_next_val, TEMP.USERNAME, 'ssitesm', TEMP.ID_PROFILE,  1, null, SYSDATE);
+            INSERT (ID_USUARIO, CVE_USUARIO, CONTRASENA, TIPO_USUARIO ,INDICADOR, ID_USUARIO_MODIFICACION, FECHA_CREACION)
+            VALUES( v_id_next_val, TEMP.CVE_USUARIO, 'ssitesm',TEMP.TIPO_USUARIO ,1, null, SYSDATE);
 
        COMMIT;
-     
+
 
     EXCEPTION
         WHEN OTHERS THEN
@@ -272,10 +272,10 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_userModify IN VARCHAR2
     ) IS
     BEGIN
-        UPDATE SIADM.USERS SET ACTIVE = 0, USER_MODIFY = p_userModify WHERE ID_USER = p_userId;
+        UPDATE DMTDM.TDM_CAT_USUARIO SET INDICADOR = 0, ID_USUARIO_MODIFICACION = p_userModify WHERE ID_USUARIO = p_userId;
 
         COMMIT;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
@@ -287,9 +287,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_STUDENT, STUDENT_NUMBER, FIRST_NAME, LAST_NAME, BACHELOR, EMAIL, PHONE_NUMBER, COMMENTS FROM SIADM.STUDENTS WHERE ACTIVE = 1;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -307,9 +307,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_STUDENT, STUDENT_NUMBER, FIRST_NAME, LAST_NAME, BACHELOR, EMAIL, PHONE_NUMBER, COMMENTS FROM SIADM.STUDENTS WHERE ACTIVE = 1 AND ID_STUDENT = p_id_student ;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -330,14 +330,14 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_phoneNumber IN NUMBER,
         p_comments IN VARCHAR2,
         p_userModify IN VARCHAR2
-    ) IS 
+    ) IS
         v_id_next_val NUMBER;
     BEGIN
-  
+
         SELECT COALESCE(MAX(ID_STUDENT),0)+1 INTO v_id_next_val FROM SIADM.STUDENTS;
         MERGE INTO SIADM.STUDENTS STU
         USING
-        (   SELECT p_studentId AS ID_STUDENT, p_studentNumber AS STUDENT_NUMBER, p_firstName AS FIRST_NAME, 
+        (   SELECT p_studentId AS ID_STUDENT, p_studentNumber AS STUDENT_NUMBER, p_firstName AS FIRST_NAME,
                    p_lastName AS LAST_NAME, p_bachelor AS BACHELOR, p_email AS EMAIL, p_phoneNumber AS PHONE_NUMBER,
                    p_comments AS COMMENTS, p_userModify AS USER_MODIFY
             FROM DUAL) TEMP
@@ -358,7 +358,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             VALUES( v_id_next_val, TEMP.STUDENT_NUMBER, TEMP.FIRST_NAME, TEMP.LAST_NAME, TEMP.BACHELOR, TEMP.EMAIL, TEMP.PHONE_NUMBER, TEMP.COMMENTS, 1, null, SYSDATE);
 
        COMMIT;
-     
+
 
     EXCEPTION
         WHEN OTHERS THEN
@@ -375,7 +375,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         UPDATE SIADM.STUDENTS SET ACTIVE = 0, USER_MODIFY = p_userModify WHERE ID_STUDENT = p_studentId;
 
         COMMIT;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
@@ -387,9 +387,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_ASSOCIATION, ASSOCIATION_NAME, EMAIL, PHONE_NUMBER, COMMENTS FROM SIADM.ASSOCIATIONS WHERE ACTIVE = 1;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -405,9 +405,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_ASSOCIATION, ASSOCIATION_NAME, EMAIL, PHONE_NUMBER, COMMENTS FROM SIADM.ASSOCIATIONS WHERE ACTIVE = 1 AND ID_ASSOCIATION = p_id_association;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -425,10 +425,10 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_phoneNumber IN NUMBER,
         p_comments IN VARCHAR2,
         p_userModify IN VARCHAR2
-    ) IS 
+    ) IS
         v_id_next_val NUMBER;
     BEGIN
-  
+
         SELECT COALESCE(MAX(ID_ASSOCIATION),0)+1 INTO v_id_next_val FROM SIADM.ASSOCIATIONS;
         MERGE INTO SIADM.ASSOCIATIONS ASS
         USING
@@ -449,7 +449,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             VALUES( v_id_next_val, TEMP.ASSOCIATION_NAME, TEMP.EMAIL, TEMP.PHONE_NUMBER, TEMP.COMMENTS, 1, null, SYSDATE);
 
        COMMIT;
-     
+
 
     EXCEPTION
         WHEN OTHERS THEN
@@ -467,7 +467,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         UPDATE SIADM.ASSOCIATIONS SET ACTIVE = 0, USER_MODIFY = p_userModify WHERE ID_ASSOCIATION = p_associationId;
 
         COMMIT;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
@@ -479,9 +479,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_PROJECT, PROJECT_NAME, DESC_PROJECT FROM SIADM.PROJECTS WHERE ACTIVE = 1;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -489,7 +489,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             END IF;
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
-    END; 
+    END;
 
     -- Obtiene estudiante en base a su id
     PROCEDURE SP_GET_PROJECT_BY_ID (
@@ -497,9 +497,9 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
+        OPEN c_resultados FOR
         SELECT ID_PROJECT, PROJECT_NAME, DESC_PROJECT FROM SIADM.PROJECTS WHERE ACTIVE = 1 AND ID_PROJECT = p_id_project;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -515,10 +515,10 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_projectName IN VARCHAR2,
         p_projectDesc IN VARCHAR2,
         p_userModify IN VARCHAR2
-    ) IS 
+    ) IS
         v_id_next_val NUMBER;
     BEGIN
-  
+
         SELECT COALESCE(MAX(ID_PROJECT),0)+1 INTO v_id_next_val FROM SIADM.PROJECTS;
         MERGE INTO SIADM.PROJECTS PRO
         USING
@@ -537,7 +537,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             VALUES( v_id_next_val, TEMP.PROJECT_NAME, TEMP.DESC_PROJECT, 1, null, SYSDATE);
 
        COMMIT;
-     
+
 
     EXCEPTION
         WHEN OTHERS THEN
@@ -554,7 +554,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         UPDATE SIADM.PROJECTS SET ACTIVE = 0, USER_MODIFY = p_userModify WHERE ID_PROJECT = p_projectId;
 
         COMMIT;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
@@ -568,12 +568,12 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT PRO.DESC_PROFILE
-        FROM SIADM.USERS USR, SIADM.PROFILES PRO
-        WHERE ACTIVE = 1 AND USR.ID_PROFILE = PRO.ID_PROFILE
-        AND USR.USERNAME = p_username AND USR.PASSWORD = p_password;
-    
+        OPEN c_resultados FOR
+        SELECT PRO.DESC_TIPO_USUARIO
+        FROM ADMTDM.TDM_CAT_USUARIO USR, ADMTDM.TDM_CAT_TIPO_USUARIO PRO
+        WHERE INDICADOR = 1 AND USR.TIPO_USUARIO = PRO.TIPO_USUARIO
+        AND USR.CVE_USUARIO = p_username AND USR.CONTRASENA = p_password;
+
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -589,10 +589,10 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_password IN VARCHAR2
     ) IS
     BEGIN
-        UPDATE SIADM.USERS SET PASSWORD = p_password WHERE ACTIVE = 1 AND USERNAME = p_username;
+        UPDATE ADMTDM.TDM_CAT_USUARIO SET CONTRASENA = p_password WHERE INDICADOR= 1 AND CVE_USUARIO = p_username;
 
         COMMIT;
-    
+
     EXCEPTION
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
@@ -605,10 +605,10 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT ASS.ID_ASSOCIATION, ASS.ASSOCIATION_NAME FROM REL_STUDENT_ASSOCIATION RSA, ASSOCIATIONS ASS 
+        OPEN c_resultados FOR
+        SELECT ASS.ID_ASSOCIATION, ASS.ASSOCIATION_NAME FROM REL_STUDENT_ASSOCIATION RSA, ASSOCIATIONS ASS
         WHERE RSA.ID_STUDENT = p_id_student AND ASS.ID_ASSOCIATION = RSA.ID_ASSOCIATION
-        AND ASS.ACTIVE = 1;    
+        AND ASS.ACTIVE = 1;
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -624,11 +624,11 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT STU.ID_STUDENT, STU.FIRST_NAME || ' ' ||STU.LAST_NAME AS STUDENT_NAME 
-        FROM REL_STUDENT_ASSOCIATION RSA, STUDENTS STU 
+        OPEN c_resultados FOR
+        SELECT STU.ID_STUDENT, STU.FIRST_NAME || ' ' ||STU.LAST_NAME AS STUDENT_NAME
+        FROM REL_STUDENT_ASSOCIATION RSA, STUDENTS STU
         WHERE RSA.ID_ASSOCIATION = p_id_association AND STU.ID_STUDENT = RSA.ID_STUDENT
-        AND STU.ACTIVE = 1;  
+        AND STU.ACTIVE = 1;
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -644,14 +644,14 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     )IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT ID_MEMBER, MEMBER_NAME,ID_MEMBER_TYPE,DESC_MEMBER_TYPE  FROM 
+        OPEN c_resultados FOR
+        SELECT ID_MEMBER, MEMBER_NAME,ID_MEMBER_TYPE,DESC_MEMBER_TYPE  FROM
         ((SELECT STU.ID_STUDENT AS ID_MEMBER, STU.FIRST_NAME || ' ' || STU.LAST_NAME AS MEMBER_NAME, RMP.ID_MEMBER_TYPE
-        FROM STUDENTS STU JOIN REL_MEMBER_PROJECT RMP ON STU.ID_STUDENT = RMP.ID_MEMBER 
+        FROM STUDENTS STU JOIN REL_MEMBER_PROJECT RMP ON STU.ID_STUDENT = RMP.ID_MEMBER
         WHERE RMP.ID_MEMBER_TYPE =1 AND STU.ACTIVE =1 AND RMP.ID_PROJECT = p_id_project)
         UNION ALL
         (SELECT ASS.ID_ASSOCIATION AS ID_MEMBER, ASS.ASSOCIATION_NAME AS MEMBER_NAME, RMP.ID_MEMBER_TYPE
-        FROM ASSOCIATIONS ASS JOIN REL_MEMBER_PROJECT RMP ON ASS.ID_ASSOCIATION = RMP.ID_MEMBER 
+        FROM ASSOCIATIONS ASS JOIN REL_MEMBER_PROJECT RMP ON ASS.ID_ASSOCIATION = RMP.ID_MEMBER
         WHERE RMP.ID_MEMBER_TYPE =2 AND ASS.ACTIVE =1 AND RMP.ID_PROJECT = p_id_project)) NATURAL JOIN MEMBER_TYPES MT;
     EXCEPTION
         WHEN OTHERS THEN
@@ -666,12 +666,12 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
     PROCEDURE SP_ADD_REL_STU_ASSOC(
         p_studentId IN NUMBER,
         p_associationId IN NUMBER
-    ) IS 
+    ) IS
 
     BEGIN
-  
+
         INSERT INTO  SIADM.REL_STUDENT_ASSOCIATION(ID_STUDENT, ID_ASSOCIATION)
-        SELECT p_studentId, p_associationId FROM DUAL 
+        SELECT p_studentId, p_associationId FROM DUAL
         WHERE NOT EXISTS (SELECT 1 FROM  SIADM.REL_STUDENT_ASSOCIATION WHERE ID_STUDENT = p_studentId AND ID_ASSOCIATION = p_associationId);
 
 
@@ -687,7 +687,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
     PROCEDURE SP_DEL_REL_STU_ASSOC(
         p_studentId IN NUMBER,
         p_associationId IN NUMBER
-    ) IS 
+    ) IS
 
     BEGIN
 
@@ -701,7 +701,7 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-     
+
 
      -- Obtiene los proyectos en los que participa un miembro
     PROCEDURE SP_GET_PROY_BY_MEMB_ID (
@@ -710,8 +710,8 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
-        OPEN c_resultados FOR   
-        SELECT ID_PROJECT FROM REL_MEMBER_PROJECT WHERE ID_MEMBER = p_memberId AND ID_MEMBER_TYPE =p_memberType; 
+        OPEN c_resultados FOR
+        SELECT ID_PROJECT FROM REL_MEMBER_PROJECT WHERE ID_MEMBER = p_memberId AND ID_MEMBER_TYPE =p_memberType;
     EXCEPTION
         WHEN OTHERS THEN
             IF (c_resultados%isOpen) THEN
@@ -726,12 +726,12 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
         p_memberId IN NUMBER,
         p_memberType IN NUMBER,
         p_projectId IN NUMBER
-    ) IS 
+    ) IS
 
     BEGIN
 
        INSERT INTO  SIADM.REL_MEMBER_PROJECT(ID_MEMBER, ID_MEMBER_TYPE, ID_PROJECT)
-       SELECT p_memberId, p_memberType, p_projectId FROM DUAL 
+       SELECT p_memberId, p_memberType, p_projectId FROM DUAL
        WHERE NOT EXISTS (SELECT 1 FROM  SIADM.REL_MEMBER_PROJECT WHERE ID_MEMBER = p_memberId AND ID_MEMBER_TYPE = p_memberType AND ID_PROJECT = p_projectId);
 
        COMMIT;
@@ -741,16 +741,16 @@ v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-    
+
     -- Elimina  relacion miembro - proyecto
     PROCEDURE SP_DEL_REL_MEMB_PROJ(
         p_memberId IN NUMBER,
         p_memberType IN NUMBER
-    )IS 
+    )IS
 
     BEGIN
 
-       DELETE FROM SIADM.REL_MEMBER_PROJECT WHERE ID_MEMBER = p_memberId AND ID_MEMBER_TYPE =p_memberType; 
+       DELETE FROM SIADM.REL_MEMBER_PROJECT WHERE ID_MEMBER = p_memberId AND ID_MEMBER_TYPE =p_memberType;
 
        COMMIT;
 
