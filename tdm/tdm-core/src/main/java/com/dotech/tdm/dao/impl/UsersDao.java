@@ -24,19 +24,19 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 			user = new User();
 			
 			if(DotechConstants.SP_CONSULTAR.equals(procName)){
-				user.setId(new Long (rs.getLong("ID_USER")));
-				user.setUsername(rs.getString("USERNAME"));
-				user.setProfileId(new Long (rs.getLong("ID_PROFILE")));
-				user.setProfileDesc(rs.getString("DESC_PROFILE"));
-				user.setCreationDate(rs.getString("CREATION_DATE"));
+				user.setId(new Long (rs.getLong("ID_USUARIO")));
+				user.setUsername(rs.getString("CVE_USUARIO"));
+				user.setProfileId(new Long (rs.getLong("TIPO_USUARIO")));
+				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
+				user.setCreationDate(rs.getString("FECHA_CREACION"));
 			}else if(TdmConstants.SP_GET_USER_BY_ID.equals(procName)){
-				user.setId(new Long (rs.getLong("ID_USER")));
-				user.setUsername(rs.getString("USERNAME"));
-				user.setProfileId(new Long (rs.getLong("ID_PROFILE")));
-				user.setProfileDesc(rs.getString("DESC_PROFILE"));
-				user.setCreationDate(rs.getString("CREATION_DATE"));
+				user.setId(new Long (rs.getLong("ID_USUARIO")));
+				user.setUsername(rs.getString("CVE_USUARIO"));
+				user.setProfileId(new Long (rs.getLong("TIPO_USUARIO")));
+				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
+				user.setCreationDate(rs.getString("FECHA_CREACION"));
 			}if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
-				user.setProfileDesc(rs.getString("DESC_PROFILE"));
+				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 			}else if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)|| DotechConstants.SP_ELIMINAR.equals(procName) || TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){
 				//
 			}
