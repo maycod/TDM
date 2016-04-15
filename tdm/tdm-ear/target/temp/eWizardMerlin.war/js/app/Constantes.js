@@ -1,1 +1,0 @@
-var contexto = "/merlin-wizard-webapp/rest";
