@@ -168,7 +168,7 @@
 						<webModule>
 							<groupId>com.dotech.tdm.web</groupId>
 							<artifactId>tdm-webapp</artifactId>
-							<bundleFileName>eWizardMerlin.war</bundleFileName>
+							<bundleFileName>eTdm.war</bundleFileName>
 						</webModule>
 						<jarModule>
 							<groupId>com.dotech.tdm.core</groupId>

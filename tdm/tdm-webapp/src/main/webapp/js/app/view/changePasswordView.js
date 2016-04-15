@@ -1,4 +1,4 @@
-merlinwizard.ChangePasswordView = Backbone.View.extend({	
+tdm.ChangePasswordView = Backbone.View.extend({	
 	el : jQuery('#wrapper'),
 	grid : undefined,
 	users : undefined,
@@ -6,7 +6,7 @@ merlinwizard.ChangePasswordView = Backbone.View.extend({
 		var self = this;
 		self.maskEl = self.$el;
 
-		self.users = new merlinwizard.Users();
+		self.users = new tdm.Users();
 		self.modelBinder = new Backbone.ModelBinder();
 		_.bindAll(this, 'onCambiarClick');
 		
@@ -27,7 +27,7 @@ merlinwizard.ChangePasswordView = Backbone.View.extend({
 	onCambiarClick : function(e, callback) {
 		var self = this;
 		self.maskEl.mask("Guardando...");
-		var user = new merlinwizard.User();
+		var user = new tdm.User();
 		
 		var password1 = $("#pwd")[0].value; 
 		var password2 = $("#pwd")[0].value;

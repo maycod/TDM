@@ -115,7 +115,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/com/seven_eleven/merlin/core/merlin-wizard-core/1.1.2-SNAPSHOT/merlin-wizard-core-1.1.2-SNAPSHOT.jar" sourcepath="/DISKC/Users/Maycot/Documents/STSWorkspace/SISS/merlin-wizard/merlin-wizard-core/target/merlin-wizard-core-1.1.2-SNAPSHOT-sources.jar">
+	<classpathentry kind="var" path="M2_REPO/com/dotech/tdm/core/tdm-core/1.1.2-SNAPSHOT/tdm-core-1.1.2-SNAPSHOT.jar" sourcepath="/DISKC/Users/Maycot/Documents/STSWorkspace/TDM/tdm/tdm-core/target/tdm-core-1.1.2-SNAPSHOT-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>

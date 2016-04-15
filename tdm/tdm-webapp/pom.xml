@@ -95,7 +95,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>merlin-wizard-webapp</finalName>
+		<finalName>tdm-webapp</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

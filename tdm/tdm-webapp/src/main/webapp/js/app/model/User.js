@@ -1,4 +1,4 @@
-merlinwizard.User = Backbone.AssociatedModel.extend({
+tdm.User = Backbone.AssociatedModel.extend({
 	relations: [
 	],	
 idAttribute:"_id",
@@ -12,8 +12,8 @@ validate: function(attribs){
 
 });
 
-merlinwizard.Users = Backbone.Collection.extend({
-	model:merlinwizard.User,
+tdm.Users = Backbone.Collection.extend({
+	model:tdm.User,
 	url:contexto + "/users/",
     initialize: function (model, options) {	
     }

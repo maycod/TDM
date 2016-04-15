@@ -1,10 +1,10 @@
 
 <application>
-  <display-name>merlin-wizard-ear</display-name>
+  <display-name>tdm-ear</display-name>
   <module id="WebModule_1395975966827">
   	<web>
-  		<web-uri>eWizardMerlin.war</web-uri>
-  		<context-root>eWizardMerlin</context-root>
+  		<web-uri>eTdm.war</web-uri>
+  		<context-root>eTdm</context-root>
   	</web>
   </module>  
   

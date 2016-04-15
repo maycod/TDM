@@ -1,1 +1,1 @@
-var contexto = "/merlin-wizard-webapp/rest";
+var contexto = "/tdm-webapp/rest";

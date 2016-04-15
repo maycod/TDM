@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;  
 import javax.servlet.http.HttpSession;
 
-import com.seven_eleven.merlin.dao.impl.UsersDao;
-import com.seven_eleven.merlin.domain.User;
+import com.dotech.tdm.dao.impl.UsersDao;
+import com.dotech.tdm.domain.User;
 
-import com.seven_eleven.merlin.exceptions.SevenException;
+import com.dotech.tdm.exceptions.DotechException;
 
 import oracle.jdbc.OracleTypes;
 
@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
     String usernameServer = connData.getString("usernameServer");
     String passwordServer = connData.getString("passwordServer");
 	
-	public String validateUser(String username, String password) throws SevenException, ClassNotFoundException, SQLException{
+	public String validateUser(String username, String password) throws DotechException, ClassNotFoundException, SQLException{
 		ResultSet rs = null;
 		
 		Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -111,7 +111,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("mensajeError","Error de conexión. Favor de intentar mas tarde.");
 			e.printStackTrace();
 			e.printStackTrace();
-		} catch (SevenException e) {
+		} catch (DotechException e) {
 			response.sendRedirect("login.jsp");
         	HttpSession session=request.getSession();
             session.setAttribute("mensajeError","Error de conexión. Favor de intentar mas tarde.");
