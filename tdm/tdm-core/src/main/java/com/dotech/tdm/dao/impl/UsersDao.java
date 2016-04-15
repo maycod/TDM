@@ -26,13 +26,13 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 			if(DotechConstants.SP_CONSULTAR.equals(procName)){
 				user.setId(new Long (rs.getLong("ID_USUARIO")));
 				user.setUsername(rs.getString("CVE_USUARIO"));
-				user.setProfileId(new Long (rs.getLong("TIPO_USUARIO")));
+				user.setProfileId(new Long (rs.getLong("ID_TIPO_USUARIO")));
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 				user.setCreationDate(rs.getString("FECHA_CREACION"));
 			}else if(TdmConstants.SP_GET_USER_BY_ID.equals(procName)){
 				user.setId(new Long (rs.getLong("ID_USUARIO")));
 				user.setUsername(rs.getString("CVE_USUARIO"));
-				user.setProfileId(new Long (rs.getLong("TIPO_USUARIO")));
+				user.setProfileId(new Long (rs.getLong("ID_TIPO_USUARIO")));
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 				user.setCreationDate(rs.getString("FECHA_CREACION"));
 			}if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
@@ -138,17 +138,17 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 	public Map preProcess(DotechDomain domain, String procName) {
 		Map inParams = new HashMap();
 		User u = (User)domain;
-		
+		//note: remove nulls once the bug is fixed
 		if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)){
 			inParams.put("userId", u.getId());
 			inParams.put("username", u.getUsername());
 			inParams.put("profileId", u.getProfileId());
-			inParams.put("userModify", u.getUsuario());
+			inParams.put("userModify",null);
 		}else if(DotechConstants.SP_CONSULTAR.equals(procName)){
 			
 		}else if(DotechConstants.SP_ELIMINAR.equals(procName)){			
 			inParams.put("userId", u.getId());
-			inParams.put("userModify", u.getUsuario());
+			inParams.put("userModify",null);
 		}else if(TdmConstants.SP_GET_USER_BY_ID.equals(procName)){			
 			inParams.put("userId", u.getId());
 		}else if(TdmConstants.SP_VALIDATE_USER.equals(procName)){			

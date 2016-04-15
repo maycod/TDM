@@ -1,11 +1,11 @@
-merlinwizard.UsersView = Backbone.View.extend({	
+tdm.UsersView = Backbone.View.extend({	
 	el : jQuery('#usersDiv'),
 	grid : undefined,
 	users : undefined,
 	initialize : function(options) {
 		var self = this;
 		self.maskEl = self.$el;
-		self.users = new merlinwizard.Users();
+		self.users = new tdm.Users();
 
 		self.modelBinder = new Backbone.ModelBinder();
 		
