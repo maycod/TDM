@@ -9,13 +9,13 @@
       </layout>
    </appender>
 
-   <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
+   <!--  <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
       <param name="append" value="false"/>
-      <param name="file" value="out/merlin.log"/>
+      <param name="file" value="out/tdm.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
       </layout>
-   </appender>
+   </appender>-->
 
    <root>
       <level value="INFO"/>

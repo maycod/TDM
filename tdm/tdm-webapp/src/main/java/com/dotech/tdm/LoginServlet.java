@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
                     dbNameServer, usernameServer, passwordServer);
 
         //Se insertan parametros de entrada al SP pertinente.
-        String spCall = "SIADM.PKG_SISTEMA_INFORMATIVO_SS.SP_VALIDATE_USER(?,?,?)";
+        String spCall = "TDMADM.PKG_TO_DO_MANAGER.SP_VALIDATE_USER(?,?,?)";
 
         //Se inicializa un CallableStatement para realizar la llamada al SP pertinente con sus respectivos parametros de entrada.
         CallableStatement staOra = connectionOra.prepareCall("{call "+spCall+"}", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -65,10 +65,11 @@ public class LoginServlet extends HttpServlet {
         staOra.execute();
         
         rs = (ResultSet) staOra.getObject(3);
+        
         String profile = null;
         if (rs.next())
         {
-        	profile = rs.getString("DESC_PROFILE");
+        	profile = rs.getString("DESC_TIPO_USUARIO");
         }
 		
         return profile;

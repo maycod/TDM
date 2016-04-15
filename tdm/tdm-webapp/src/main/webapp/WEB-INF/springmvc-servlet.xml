@@ -16,15 +16,7 @@
         <property name="dataSource" ref="dataSource" />        
   </bean>
   
-  <bean id="dao.StudentsDao" class="com.dotech.tdm.dao.impl.StudentsDao">
-        <property name="dataSource" ref="dataSource" />        
-  </bean>
-  
-  <bean id="dao.AssociationsDao" class="com.dotech.tdm.dao.impl.AssociationsDao">
-        <property name="dataSource" ref="dataSource" />        
-  </bean>
-  
-  <bean id="dao.ProjectsDao" class="com.dotech.tdm.dao.impl.ProjectsDao">
+  <bean id="dao.TasksDao" class="com.dotech.tdm.dao.impl.TasksDao">
         <property name="dataSource" ref="dataSource" />        
   </bean>
 
@@ -32,18 +24,11 @@
         <property name="dao" ref="dao.UsersDao"/>        
   </bean>
   
-  <bean id="service.StudentsService" class="com.dotech.tdm.service.impl.StudentsService">
-        <property name="dao" ref="dao.StudentsDao"/>        
+  <bean id="service.TasksService" class="com.dotech.tdm.service.impl.TasksService">
+        <property name="dao" ref="dao.TasksDao"/>        
   </bean>
   
-   <bean id="service.AssociationsService" class="com.dotech.tdm.service.impl.AssociationsService">
-        <property name="dao" ref="dao.AssociationsDao"/>        
-  </bean>
   
-  <bean id="service.ProjectsService" class="com.dotech.tdm.service.impl.ProjectsService">
-        <property name="dao" ref="dao.ProjectsDao"/>        
-  </bean>
- 
   <bean name="/users/*" class="com.dotech.tdm.web.controllers.UsersController">
   <property name="service" ref="service.UsersService"/>
    <property name="commandClass">
@@ -53,32 +38,13 @@
    </property>    
   </bean>  
   
-  <bean name="/students/*" class="com.dotech.tdm.web.controllers.StudentsController">
-  <property name="service" ref="service.StudentsService"/>
+  <bean name="/tasks/*" class="com.dotech.tdm.web.controllers.TasksController">
+  <property name="service" ref="service.TasksService"/>
    <property name="commandClass">
 	   <value type="java.lang.Class">
-	    com.dotech.tdm.domain.Student
+	    com.dotech.tdm.domain.Task
 	    </value>
    </property>    
   </bean>
-  
-  <bean name="/associations/*" class="com.dotech.tdm.web.controllers.AssociationsController">
-  <property name="service" ref="service.AssociationsService"/>
-   <property name="commandClass">
-	   <value type="java.lang.Class">
-	    com.dotech.tdm.domain.Association
-	    </value>
-   </property>    
-  </bean>
-  
-  
-  <bean name="/projects/*" class="com.dotech.tdm.web.controllers.ProjectsController">
-  <property name="service" ref="service.ProjectsService"/>
-   <property name="commandClass">
-	   <value type="java.lang.Class">
-	    com.dotech.tdm.domain.Project
-	    </value>
-   </property>    
-  </bean>  
   
 </beans>
