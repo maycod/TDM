@@ -19,25 +19,26 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
 
     -- Obtiene las tareas en donde el id_userID es el responsable.--
     PROCEDURE SP_GET_LIST_TASKS_BY_USER(
-      p_userID IN NUMBER,
+      p_userId IN NUMBER,
       c_resultados OUT REF_CURSOR
     );
 
     -- Obtiene la tarea en base a su id
     PROCEDURE SP_GET_TASK_BY_ID(
-      p_taskid IN NUMBER,
+      p_taskId IN NUMBER,
       c_resultados OUT REF_CURSOR
     );
 
     --Agregar nuevo task
     PROCEDURE SP_ADD_TASK(
-        p_tareaId IN NUMBER,
-        P_cvetarea in VARCHAR2,
-      	p_desctarea IN VARCHAR2,
-        p_tipotarea IN NUMBER,
-      	p_tareapadre IN NUMBER,
-      	P_nivel IN NUMBER,
-        P_responsable IN VARCHAR2
+      p_taskId IN NUMBER,
+      p_taskName in VARCHAR2,
+      p_taskDesc IN VARCHAR2,
+      p_observations IN VARCHAR2,
+      p_taskTypeId IN NUMBER,
+      p_parentTaskId IN NUMBER,
+      p_level IN NUMBER,
+      p_responsibleId IN VARCHAR2
     );
 
     CREATE OR REPLACE PACKAGE BODY ADMTDM.PKG_TO_DO_MANAGER AS
@@ -64,9 +65,9 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
         RAISE;
     END;
 
-    -- Obtiene las tareas en donde a su id_userID es el responsable.--
+    -- Obtiene las tareas en donde a su id_userId es el responsable.--
     PROCEDURE SP_GET_LIST_TASKS_BY_USER(
-      id_userID IN NUMBER,
+      id_userId IN NUMBER,
       c_resultados OUT REF_CURSOR
     )
     BEGIN
@@ -75,7 +76,7 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
             TASK.ID_TIPO_TAREA, TASK.ID_TAREA_PADRE,TASK.NIVEL,
             TASK.ID_RESPONSABLE
       FROM ADMTDM.TDM_CAT_TAREA TASK
-      WHERE TASK.INDICADOR = 1 AND TASK.ID_RESPONSABLE = id_userID;
+      WHERE TASK.INDICADOR = 1 AND TASK.ID_RESPONSABLE = id_userId;
     EXCEPTION
       WHEN OTHERS THEN
         IF (c_resultados%isOpen) THEN
@@ -87,7 +88,7 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
 
     -- Obtiene la tarea en base a su id
     PROCEDURE SP_GET_TASK_BY_ID(
-      p_taskid IN NUMBER,
+      p_taskId IN NUMBER,
       c_resultados OUT REF_CURSOR
     )
     BEGIN
@@ -96,7 +97,7 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
             TASK.ID_TIPO_TAREA, TASK.ID_TAREA_PADRE,TASK.NIVEL,
             TASK.ID_RESPONSABLE
       FROM ADMTDM.TDM_CAT_TAREA TASK
-      WHERE TASK.INDICADOR = 1 AND TASK.ID_TAREA = p_taskid;
+      WHERE TASK.INDICADOR = 1 AND TASK.ID_TAREA = p_taskId;
     EXCEPTION
       WHEN OTHERS THEN
         IF (c_resultados%isOpen) THEN
@@ -108,27 +109,29 @@ CREATE OR REPLACE PACKAGE ADMTDM.PKG_TO_DO_MANAGER AS
 
     --Agregar nuevo task
     PROCEDURE SP_ADD_TASK(
-        p_tareaId IN NUMBER,
-        P_cvetarea in VARCHAR2,
-      	p_desctarea IN VARCHAR2,
-        p_observaciones IN VARCHAR2,
-        p_tipotarea IN NUMBER,
-      	p_tareapadre IN NUMBER,
-      	P_nivel IN NUMBER,
-        P_responsable IN VARCHAR2
+      p_taskId IN NUMBER,
+      p_taskName in VARCHAR2,
+      p_taskDesc IN VARCHAR2,
+      p_observations IN VARCHAR2,
+      p_taskTypeId IN NUMBER,
+      p_parentTaskId IN NUMBER,
+      p_level IN NUMBER,
+      p_responsibleId IN VARCHAR2
     ) IS
         v_id_next_val NUMBER;
     BEGIN
-      SELECT p_tareaId AS ID_TAREA, p_cvetarea AS CVE_TAREA, p_desctarea AS DESC_TAREA, p_observaciones
-        AS OBSERVACIONES, p_tipotarea AS ID_TIPO_TAREA, p_tareapadre AS ID_TAREA_PADRE, p_nivel AS NIVEL, p_responsable AS ID_RESPONSABLE
+      SELECT p_taskId AS ID_TAREA, p_taskName AS CVE_TAREA, p_taskDesc AS DESC_TAREA,
+      p_observations AS OBSERVACIONES, p_taskTypeId AS ID_TIPO_TAREA,
+      p_parentTaskId AS ID_TAREA_PADRE, p_level AS NIVEL, p_responsibleId AS ID_RESPONSABLE
         FROM TDM_CAT_TAREA
 
 
       COALESCE(MAX(ID_USER),0)+1 INTO v_id_next_val FROM SIADM.TDM_CAT_TAREA;
       MERGE INTO SIADM.USERS USR
       USING
-      (   SELECT p_tareaId AS ID_TAREA, p_cvetarea AS CVE_TAREA, p_desctarea AS DESC_TAREA, p_observaciones
-        AS OBSERVACIONES, p_tipotarea AS ID_TIPO_TAREA, p_tareapadre AS ID_TAREA_PADRE, p_nivel AS NIVEL, p_responsable AS ID_RESPONSABLE
+      (   SELECT p_taskId AS ID_TAREA, p_taskName AS CVE_TAREA, p_taskDesc AS DESC_TAREA,
+         p_observations AS OBSERVACIONES, p_taskTypeId AS ID_TIPO_TAREA,
+         p_parentTaskId AS ID_TAREA_PADRE, p_level AS NIVEL, p_responsibleId AS ID_RESPONSABLE
         FROM DUAL) TEMP
       ON
       (  TEMP.ID_USER = USR.ID_USER )
