@@ -7,18 +7,16 @@
 		response.sendRedirect("../login.jsp");	
 	}
 	String  profile = (String)session.getAttribute("profile");
-	String  idUser = (String)request.getParameter("id");
-	
+
 %>
 <html lang="en">
 <head>
 
 <link rel="import" href="includes.html" >
 
-
 <script type="text/javascript">
 
-var usersDetailView;
+var usersView;
 var tdm = {};
 
 jQuery(document).ready(function($){
@@ -31,15 +29,18 @@ jQuery(document).ready(function($){
 	       xhr.setRequestHeader("Content-Type","application/json;charset=utf-8");	              
 	    }
 	});
-	usersDetailView = new tdm.UsersDetailView();
+	//usersView = new tdm.UsersView();
 	
 	var profile = $("#profile")[0].innerHTML;
 	if (profile == "Administrador"){
 		var tabUsarios = $("#tabUsuarios");
 		tabUsarios.css("display", "block");
-		var btnEditar = $("#btnEditar");
-		btnEditar.css("display", "block");
+		var btnAgregar = $("#btnAgregar");
+		btnAgregar.css("display", "block");
+		var btnEliminar = $("#btnEliminar");
+		btnEliminar.css("display", "block");
 	}
+	
 	
 	
 });
@@ -51,7 +52,7 @@ jQuery(document).ready(function($){
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>ToDoManager - Usuarios</title>
+<title>ToDoManager - Tareas</title>
 
 </head>
 <style>
@@ -107,9 +108,9 @@ jQuery(document).ready(function($){
 			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-					<li><a href="tareas.jsp"><i
+					<li class="active"><a href="tareas.jsp"><i
 							class="fa fa-fw fa-bar-chart-o"></i>Tareas</a></li>
-					<li class="active" style="display:none;" id="tabUsuarios"><a href="usuarios.jsp"><i
+					<li  style="display:none;" id="tabUsuarios"><a href="usuarios.jsp"><i
 							class="fa fa-fw fa-bar-chart-o"></i>Usuarios</a></li>
 				</ul>
 			</div>
@@ -123,81 +124,41 @@ jQuery(document).ready(function($){
 				<div class="row">
 					<div class="col-lg-12">
 						<h1 class="page-header">
-							Usuarios <small>Detalle</small>
+							Tareas <small></small>
 						</h1>
 					</div>
 				</div>
 				<!-- /.row -->
 			</div>
 			<div>
-				<button type="button" class="btn btn-default btn-sm" style="float:right;" onclick="window.history.go(-1); return false;" >
-		          <span class="glyphicon glyphicon-circle-arrow-left"></span>Volver
+				 <button type="button" class="btn btn-default btn-sm" style="float:right;display:none;" id="btnEliminar">
+		          <span class="glyphicon glyphicon-trash"></span>Eliminar
 		        </button>
-		        <button type="button" class="btn btn-default btn-sm" style="float:right;display:none;" id="btnEditar">
-		          <span class="glyphicon glyphicon-edit"></span>Editar
+				<button type="button" class="btn btn-default btn-sm" style="float:right;display:none;" onclick="location.href='usuarioAgregar.jsp';" id="btnAgregar">
+		          <span class="glyphicon glyphicon-plus"></span>Agregar
 		        </button>
-			</div>
-			<div class="jumbotron" id="detailInfoDivUsr" style="width:70%;margin: 0 auto;margin-top:30px;padding-top:2px;display:block;">
-				<h3 style="text-align:center;">Información Detallada de Usuario</h3>
-				<div style="width:70%;margin: 0 auto;">
-					<label id="idUser" style="display:none;"><%=idUser%></label><br>
-					<table class="table table-bordered table-striped">
-					    <tbody>
-					      <tr>
-					        <th style="width:20%;">Nombre de Usuario:</th>
-					        <td id="usernameUsr"></td>
-					      </tr>
-					      <tr>
-					        <th>Perfil:</th>
-					        <td id="profileDescUsr"></td>
-					      </tr>
-					      <tr>
-					        <th>Fecha de Creacion:</th>
-					        <td id="creationDateUsr"></td>
-					      </tr>
-					    </tbody>
-					  </table>
-				</div>
-			</div>
-			<div class="jumbotron" id="detailInfoDivAdm" style="width:70%;margin: 0 auto;margin-top:30px;padding-top:2px;display:none;">
-				<h3 style="text-align:center;">Información Detallada de Usuario</h3>
-				<div style="width:70%;margin: 0 auto;">
-					<table class="table table-bordered table-striped">
-					    <tbody>
-					      <tr>
-					        <th style="width:20%;">Nombre de Usuario:</th>
-					        <td><input type="text" class="form-control" id="usernameAdm"></td>
-					      </tr>
-					      <tr>
-					        <th>Perfil:</th>
-					        <td>
-					        	<select class="form-control" id="profileDescAdm">
-								  <option value="1">Administrador</option>
-								  <option value="2">Lider</option>
-								  <option value="3">Programador</option>
-								</select>
-					        </td>
-					      </tr>
-					    </tbody>
-					  </table>
-					  <button type="button" class="btn btn-default btn-sm" style="float:right;" id="btnGuardar">
-				      	<span class="glyphicon glyphicon-floppy-disk"></span>Guardar
-				      </button>
-				</div>
 			</div>
 			<!-- /.container-fluid -->
-			
+			<div class ="row" id="filtersContainer">
+			<table style="width:80%">
+			  <tr>
+			    <td style="width:25%"><div id="filter1"></div></td>
+			    <td style="width:25%"><div id="filter2"></div></td> 
+			    <td style="width:25%"><div id="filter3"></div></td>
+			  </tr>
+			</table>
+			</div>
+			<div class="backgrid-container" id="usersTable"></div>
 		</div>
 		<!-- /#page-wrapper -->
 
 	</div>
 	<!-- /#wrapper -->
 
-
 	<!-- Modelos -->
 	<script type="text/javascript" src="../js/app/Constantes.js"></script>
 	<script type="text/javascript" src="../js/app/model/User.js"></script>
-	<script type="text/javascript" src="../js/app/view/usersDetailView.js"></script>
+	<script type="text/javascript" src="../js/app/view/usersView.js"></script>
 	<script type="text/javascript" src="../js/nobackspace.js"></script>
 
 

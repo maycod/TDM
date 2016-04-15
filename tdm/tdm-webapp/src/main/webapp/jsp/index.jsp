@@ -89,7 +89,7 @@ $(document).ready(function($){
 				</button>
 				<img class="navbar-brand-img" src="../images/photos/LogoIndex.png"
 					alt="Formacion Social"> <a class="navbar-center navbar-brand"
-					href="index.jsp">ToDo Manager</a>
+					href="index.jsp">To Do Manager</a>
 			</div>
 			<!-- Top Menu Items -->
 			<ul class="nav navbar-right top-nav">

@@ -90,7 +90,7 @@ public class LoginServlet extends HttpServlet {
 			String profile = validateUser(username, password);
 	        
 	        if(profile != null){
-	        	response.sendRedirect("jsp/index.jsp");
+	        	response.sendRedirect("jsp/tareas.jsp");
 		        session.setAttribute("username",username);
 		        session.setAttribute("profile",profile);
 		        session.setAttribute("mensajeError","");

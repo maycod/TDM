@@ -51,7 +51,7 @@ jQuery(document).ready(function($){
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>SISS</title>
+<title>ToDoManager - Usuarios</title>
 
 </head>
 <style>
@@ -87,9 +87,9 @@ jQuery(document).ready(function($){
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<img class="navbar-brand-img" src="../images/photos/LogoIndex.png"
+				<img class="navbar-brand-img" src="../images/photos/dtchLogo500W.png"
 					alt="Formacion Social"> <a class="navbar-center navbar-brand"
-					href="index.jsp">Sistema Informativo del Servicio Social</a>
+					href="tareas.jsp">To Do Manager</a>
 			</div>
 			<!-- Top Menu Items -->
 			<ul class="nav navbar-right top-nav">
@@ -107,13 +107,8 @@ jQuery(document).ready(function($){
 			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-					<li><a href="alumnos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i> Alumnos Destacados </a></li>
-					<li><a href="grupos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i> Grupos Estudiantiles
-							Destacados</a></li>
-					<li><a href="proyectos.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Proyectos</a></li>
+					<li><a href="tareas.jsp"><i
+							class="fa fa-fw fa-bar-chart-o"></i>Tareas</a></li>
 					<li class="active" style="display:none;" id="tabUsuarios"><a href="usuarios.jsp"><i
 							class="fa fa-fw fa-bar-chart-o"></i>Usuarios</a></li>
 				</ul>
