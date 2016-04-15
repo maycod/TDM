@@ -1,6 +1,6 @@
 package com.dotech.tdm.dao;
 
-public interface IUsersDao extends ISevenDAO{
+public interface IUsersDao extends IDotechDAO{
 	
 
 }

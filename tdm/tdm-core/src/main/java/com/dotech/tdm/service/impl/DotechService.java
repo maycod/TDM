@@ -5,19 +5,19 @@ import java.util.List;
 
 import org.springframework.context.support.ApplicationObjectSupport;
 
-import com.dotech.tdm.dao.ISevenDAO;
+import com.dotech.tdm.dao.IDotechDAO;
 import com.dotech.tdm.exceptions.DotechException;
 import com.dotech.tdm.service.IDotechService;
 
 public abstract class DotechService extends ApplicationObjectSupport implements IDotechService{
 
-	private ISevenDAO dao;
+	private IDotechDAO dao;
 
-	public ISevenDAO getDao() {
+	public IDotechDAO getDao() {
 		return dao;
 	}
 
-	public void setDao(ISevenDAO dao) {
+	public void setDao(IDotechDAO dao) {
 		this.dao = dao;
 	}
 	

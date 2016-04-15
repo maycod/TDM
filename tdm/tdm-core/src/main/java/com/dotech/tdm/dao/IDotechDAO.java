@@ -5,7 +5,7 @@ import java.util.List;
 import com.dotech.tdm.exceptions.DotechException;
 
 
-public interface ISevenDAO {
+public interface IDotechDAO {
 
 	
 	public List buscar(Object params) throws DotechException;

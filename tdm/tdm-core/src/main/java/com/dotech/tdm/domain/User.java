@@ -2,19 +2,12 @@ package com.dotech.tdm.domain;
 
 
 public class User extends DotechDomain{
-	private Long id;
 	private String username;
 	private String password;
 	private Long profileId;
 	private String profileDesc;
 	private String creationDate;
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getUsername() {
 		return username;
 	}

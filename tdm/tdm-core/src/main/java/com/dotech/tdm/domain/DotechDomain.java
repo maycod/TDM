@@ -23,10 +23,32 @@ import com.dotech.tdm.exceptions.DotechException;
 
 public abstract class DotechDomain implements JSONAware{
 
-	
+	private Long id;
 	private String usuario;
-	
 	private String consulta;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public String getConsulta() {
+		return consulta;
+	}
+
+	public void setConsulta(String consulta) {
+		this.consulta = consulta;
+	}
+
+	public String getUsuario(){
+		return this.usuario;
+	}
+	
+	public void setUsuario(String usuario){
+		this.usuario = usuario;
+	}
 	
 	public DotechDomain(){
 		try{
@@ -64,25 +86,7 @@ public abstract class DotechDomain implements JSONAware{
 		
 	}
 	
-	public abstract Long getId();
-	
-	public abstract void setId(Long id);
-	
-	public String getConsulta() {
-		return consulta;
-	}
 
-	public void setConsulta(String consulta) {
-		this.consulta = consulta;
-	}
-
-	public String getUsuario(){
-		return this.usuario;
-	}
-	
-	public void setUsuario(String usuario){
-		this.usuario = usuario;
-	}
 	
 	public Map toMap() throws DotechException{
 		try {
