@@ -16,13 +16,13 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
     PROCEDURE SP_GET_LIST_USERS (
         c_resultados OUT REF_CURSOR
     );
-    
+
      -- Obtiene usuario en base a su id
     PROCEDURE SP_GET_USER_BY_ID (
         p_id_user IN NUMBER,
         c_resultados OUT REF_CURSOR
     );
-    
+
     -- Agrega nuevo usuario
     PROCEDURE SP_ADD_USER(
         p_userId IN NUMBER,
@@ -30,7 +30,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
         p_profileId IN NUMBER,
         p_userModify IN VARCHAR2
     );
-    
+
      -- Inactiva usuario
     PROCEDURE SP_DEL_USER (
         p_userId IN NUMBER,
@@ -43,18 +43,18 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
         p_password IN VARCHAR2,
         c_resultados OUT REF_CURSOR
     );
-  
+
     -- Actualiza contrasena del usuario
     PROCEDURE SP_UPDATE_USER_PASSWORD(
         p_username IN VARCHAR2,
         p_password IN VARCHAR2
     );
-    
+
     --Obtiene el listado de actividades.--
     PROCEDURE SP_GET_LIST_TASKS(
       c_resultados OUT REF_CURSOR
     );
-    
+
     -- Obtiene las tareas en donde el id_userID es el responsable.--
     PROCEDURE SP_GET_LIST_TASKS_BY_USER(
       p_userId IN NUMBER,
@@ -66,7 +66,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
       p_taskId IN NUMBER,
       c_resultados OUT REF_CURSOR
     );
-    
+
     --Agregar nuevo task
     PROCEDURE SP_ADD_TASK(
       p_taskId IN NUMBER,
@@ -78,21 +78,22 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
       p_level IN NUMBER,
       p_responsibleId IN VARCHAR2
     );
-    
+
     END PKG_TO_DO_MANAGER;
   /
 
     CREATE OR REPLACE PACKAGE BODY TDMADM.PKG_TO_DO_MANAGER AS
 
     v_error_message VARCHAR2(50) := 'Error, Process wil be aborted';
-    
+
       -- Obtiene listado de usuarios
     PROCEDURE SP_GET_LIST_USERS (
         c_resultados OUT REF_CURSOR
     ) IS
     BEGIN
         OPEN c_resultados FOR
-        SELECT USR.ID_USUARIO, USR.CVE_USUARIO, USR.ID_TIPO_USUARIO, PRO.DESC_TIPO_USUARIO ,USR.FECHA_CREACION
+        SELECT USR.ID_USUARIO, USR.CVE_RESPONSABLE, USR.CVE_USUARIO, USR.DESC_USUARIO, USR.ACTIVO,
+          USR.ID_TIPO_USUARIO, PRO.DESC_TIPO_USUARIO
         FROM TDMADM.TDM_CAT_USUARIO USR, TDMADM.TDM_CAT_TIPO_USUARIO PRO
         WHERE USR.INDICADOR = 1 AND USR.ID_TIPO_USUARIO = PRO.ID_TIPO_USUARIO;
 
@@ -112,7 +113,8 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
     ) IS
     BEGIN
         OPEN c_resultados FOR
-        SELECT USR.ID_USUARIO, USR.CVE_USUARIO,USR.ID_TIPO_USUARIO,PRO.DESC_TIPO_USUARIO ,USR.FECHA_CREACION
+        SELECT USR.ID_USUARIO, USR.CVE_RESPONSABLE, USR.CVE_USUARIO, USR.DESC_USUARIO, USR.ACTIVO,
+          USR.ID_TIPO_USUARIO, PRO.DESC_TIPO_USUARIO
         FROM TDMADM.TDM_CAT_USUARIO USR, TDMADM.TDM_CAT_TIPO_USUARIO PRO
         WHERE USR.INDICADOR = 1 AND USR.ID_TIPO_USUARIO = PRO.ID_TIPO_USUARIO
         AND USR.ID_USUARIO= p_id_user;
@@ -125,7 +127,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-    
+
      -- Agrega nuevo usuario
     PROCEDURE SP_ADD_USER (
         p_userId IN NUMBER,
@@ -160,7 +162,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-    
+
 
      -- Inactiva usuario
     PROCEDURE SP_DEL_USER (
@@ -199,7 +201,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-    
+
     -- Actualiza password de usuario
     PROCEDURE SP_UPDATE_USER_PASSWORD(
         p_username IN VARCHAR2,
@@ -215,7 +217,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
             DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
             RAISE;
     END;
-    
+
     --Obtiene el listado de todas las actividades.--
     PROCEDURE SP_GET_LIST_TASKS(
       c_resultados OUT REF_CURSOR
@@ -235,7 +237,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
         DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
         RAISE;
     END;
-    
+
     -- Obtiene las tareas en donde a su id_userId es el responsable.--
     PROCEDURE SP_GET_LIST_TASKS_BY_USER(
       p_userId IN NUMBER,
@@ -277,7 +279,7 @@ CREATE OR REPLACE PACKAGE TDMADM.PKG_TO_DO_MANAGER AS
         DBMS_OUTPUT.PUT_LINE(v_error_message || SQLCODE || ': ' || SQLERRM);
         RAISE;
     END;
-    
+
      --Agregar nuevo task
     PROCEDURE SP_ADD_TASK(
       p_taskId IN NUMBER,
