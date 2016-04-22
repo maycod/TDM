@@ -41,8 +41,8 @@ tdm.UsersView = Backbone.View.extend({
 			cell : "string",
 			editable : false,
 		}, {
-			name : "userCve",
-			label : "Clave de Usuario",
+			name : "userCodename",
+			label : "Codigo de Usuario",
 			editable : false
 		}, 
 		// {
@@ -111,17 +111,17 @@ tdm.UsersView = Backbone.View.extend({
 
 		$("#filter2").prepend(profileDescFilter.render().el);
 
-		var userCveFilter = new Backgrid.Extension.ClientSideFilter({
+		var userCodenameFilter = new Backgrid.Extension.ClientSideFilter({
 			collection: self.users,
-			name: "userCveFilter",
-			placeholder: "Clave de Usuario",
+			name: "userCodenameFilter",
+			placeholder: "Codigo de Usuario",
 			// The model fields to search for matches
-			fields: ['userCve'],
+			fields: ['userCodename'],
 			// How long to wait after typing has stopped before searching can start
 			wait: 150
 		});
 
-		$("#filter3").prepend(userCveFilter.render().el);
+		$("#filter3").prepend(userCodenameFilter.render().el);
 		
 		// Fecha <-- COMENTADO -->
 		// var creationDateFilter = new Backgrid.Extension.ClientSideFilter({
