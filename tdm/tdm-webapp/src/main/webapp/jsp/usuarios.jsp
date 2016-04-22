@@ -3,9 +3,9 @@
 <%
 	session=request.getSession();  
 	String  username = (String)session.getAttribute("username");
-	if (username == null){
-		response.sendRedirect("../login.jsp");	
-	}
+	// if (username == null){
+		// response.sendRedirect("../login.jsp");	
+	// }
 	String  profile = (String)session.getAttribute("profile");
 
 %>
@@ -145,6 +145,7 @@ jQuery(document).ready(function($){
 			    <td style="width:25%"><div id="filter1"></div></td>
 			    <td style="width:25%"><div id="filter2"></div></td> 
 			    <td style="width:25%"><div id="filter3"></div></td>
+			    <!--	<td style="width:25%"><div id="filter4"></div></td> -->
 			  </tr>
 			</table>
 			</div>

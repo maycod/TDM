@@ -41,11 +41,17 @@ tdm.UsersView = Backbone.View.extend({
 			cell : "string",
 			editable : false,
 		}, {
-			name : "creationDate",
-			label : "Fecha de Creacion",
-			cell : "string",
+			name : "userCve",
+			label : "Clave de Usuario",
 			editable : false
-		}, {
+		}, 
+		// {
+		// 	name : "creationDate",
+		// 	label : "Fecha de Creacion",
+		// 	cell : "string",
+		// 	editable : false
+		// }, 
+		{
 			name : "id",
 			label : "",
 			cell : UriCell,
@@ -104,18 +110,31 @@ tdm.UsersView = Backbone.View.extend({
 			});
 
 		$("#filter2").prepend(profileDescFilter.render().el);
-		
-		var creationDateFilter = new Backgrid.Extension.ClientSideFilter({
-			  collection: self.users,
-			  name: "creationDate",
-			  placeholder: "Fecha de Creacion",
-			  // The model fields to search for matches
-			  fields: ['creationDate'],
-			  // How long to wait after typing has stopped before searching can start
-			  wait: 150
-			});
 
-		$("#filter3").prepend(creationDateFilter.render().el);
+		var userCveFilter = new Backgrid.Extension.ClientSideFilter({
+			collection: self.users,
+			name: "userCveFilter",
+			placeholder: "Clave de Usuario",
+			// The model fields to search for matches
+			fields: ['userCve'],
+			// How long to wait after typing has stopped before searching can start
+			wait: 150
+		});
+
+		$("#filter3").prepend(userCveFilter.render().el);
+		
+		// Fecha <-- COMENTADO -->
+		// var creationDateFilter = new Backgrid.Extension.ClientSideFilter({
+		// 	  collection: self.users,
+		// 	  name: "creationDate",
+		// 	  placeholder: "Fecha de Creacion",
+		// 	  // The model fields to search for matches
+		// 	  fields: ['creationDate'],
+		// 	  // How long to wait after typing has stopped before searching can start
+		// 	  wait: 150
+		// 	});
+
+		// $("#filter4").prepend(creationDateFilter.render().el);
 		
 		
 
