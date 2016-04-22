@@ -3,9 +3,9 @@
 <%
 	session=request.getSession();  
 	String  username = (String)session.getAttribute("username");
-	// if (username == null){
-		// response.sendRedirect("../login.jsp");	
-	// }
+	if (username == null){
+	  response.sendRedirect("../login.jsp");	
+	}
 	String  profile = (String)session.getAttribute("profile");
 
 %>
@@ -99,7 +99,7 @@ jQuery(document).ready(function($){
 						<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="cambiarClave.jsp"><i class="fa fa-fw fa-gear"></i> Cambiar
-								contraseña</a></li>
+								contraseÃ±a</a></li>
 						<li class="divider"></li>
 						<li><a href="../LogoutServlet"><i
 								class="fa fa-fw fa-power-off"></i> Salir</a></li>
