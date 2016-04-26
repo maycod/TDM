@@ -25,15 +25,14 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 			
 			if(DotechConstants.SP_CONSULTAR.equals(procName)){
 				task.setId(new Long (rs.getLong("ID_TAREA")));
-				task.setTaskName(rs.getString("CVE_TARTEA"));
+				task.setTaskName(rs.getString("CVE_TAREA"));
 				task.setTaskDesc(rs.getString("DESC_TAREA"));
-				task.setTaskTypeId(new Integer(rs.getInt("ID_TIPO_TAREA")));
 				task.setParentTaskId(new Integer(rs.getInt("ID_TAREA_PADRE")));
-				task.setLevel(new Integer(rs.getInt("NIVEL")));
+				task.setStatus(new Integer(rs.getInt("ESTATUS")));
 			
 			}else if(TdmConstants.SP_GET_LIST_TASKS_BY_USER.equals(procName)){
 				task.setId(new Long (rs.getLong("ID_TAREA")));
-				task.setTaskName(rs.getString("CVE_TARTEA"));
+				task.setTaskName(rs.getString("CVE_TAREA"));
 				task.setTaskDesc(rs.getString("DESC_TAREA"));
 				task.setTaskTypeId(new Integer(rs.getInt("ID_TIPO_TAREA")));
 				task.setParentTaskId(new Integer(rs.getInt("ID_TAREA_PADRE")));
@@ -41,11 +40,16 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 				
 			}else if(TdmConstants.SP_GET_TASK_BY_ID.equals(procName)){
 				task.setId(new Long (rs.getLong("ID_TAREA")));
-				task.setTaskName(rs.getString("CVE_TARTEA"));
+				task.setParentTaskId(new Integer (rs.getInt("ID_TAREA_PADRE")));
+				task.setTaskName(rs.getString("CVE_TAREA"));
 				task.setTaskDesc(rs.getString("DESC_TAREA"));
 				task.setObservations(rs.getString("OBSERVACIONES"));
-				task.setTaskTypeId(new Integer(rs.getInt("ID_TIPO_TAREA")));
 				task.setResponsibleId(new Long (rs.getLong("ID_RESPONSABLE")));
+				task.setResponsibleName(rs.getString("NOMBRE_RESPONSABLE"));
+				task.setTimeBudget(new Integer(rs.getInt("HORAS_PRESUPUESTO")));
+				task.setStatus(new Integer(rs.getInt("ESTATUS")));
+				boolean active = rs.getInt("ACTIVO")==1;
+				task.setActive(new Boolean(active));
 				
 			}if(TdmConstants.SP_VALIDATE_TASK.equals(procName)){
 				task.setId(new Long (rs.getLong("VALOR")));
@@ -101,10 +105,11 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 		sspdefa.addInParam("taskName", OracleTypes.VARCHAR);
 		sspdefa.addInParam("taskDesc", OracleTypes.VARCHAR);
 		sspdefa.addInParam("observations", OracleTypes.VARCHAR);
-		sspdefa.addInParam("taskTypeId", OracleTypes.NUMBER);
 		sspdefa.addInParam("parentTaskId", OracleTypes.NUMBER);
-		sspdefa.addInParam("level", OracleTypes.NUMBER);
 		sspdefa.addInParam("responsibleId", OracleTypes.NUMBER);
+		sspdefa.addInParam("timeBudget", OracleTypes.NUMBER);
+		sspdefa.addInParam("status", OracleTypes.NUMBER);
+		sspdefa.addInParam("active", OracleTypes.NUMBER);
 		sspdefa.addInParam("userModify", OracleTypes.VARCHAR);
 		sspdefa.setReturnsCursor(false);
 		
@@ -112,8 +117,8 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 		procedures.put(DotechConstants.SP_MODIFICAR, sspdefa);
 				
 		DotechSPDef sspdefe = new DotechSPDef();
-		sspdefe.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_DEL_USER);
-		sspdefe.addInParam("userId", OracleTypes.NUMBER);
+		sspdefe.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_DEL_TASK);
+		sspdefe.addInParam("taskId", OracleTypes.NUMBER);
 		sspdefe.addInParam("userModify", OracleTypes.VARCHAR);
 		sspdefe.setReturnsCursor(false);
 		
@@ -157,10 +162,17 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 			inParams.put("taskName", t.getTaskName());
 			inParams.put("taskDesc", t.getTaskDesc());
 			inParams.put("observations", t.getObservations());
-			inParams.put("taskTypeId", t.getTaskTypeId());
 			inParams.put("parentTaskId", t.getParentTaskId());
-			inParams.put("level", t.getLevel());
 			inParams.put("responsibleId", t.getResponsibleId());
+			inParams.put("timeBudget", t.getTimeBudget());
+			inParams.put("status", t.getStatus());
+			int activeVal = 0; 
+			if(t.getActive()!=null){
+				if (t.getActive().booleanValue()){
+					activeVal=1;
+				}					
+			}
+			inParams.put("active",new Integer(activeVal));
 			inParams.put("userModify", t.getUsuario());
 		}else if(DotechConstants.SP_CONSULTAR.equals(procName)){
 			

@@ -19,9 +19,9 @@
 var usersView;
 var tdm = {};
 
-jQuery(document).ready(function($){
+$(document).ready(function($){
 	
-	
+	$('#template').load('template.html');
 	$.ajaxSetup({
 		cache: false,
 	    beforeSend: function (xhr)
@@ -40,7 +40,21 @@ jQuery(document).ready(function($){
 		var btnEliminar = $("#btnEliminar");
 		btnEliminar.css("display", "block");
 	}
-	
+	setTimeout(function () {
+		var username = $("#username").text();
+		$("#usernameNavBar").append(username);
+        console.log("test");
+        var profile = jQuery("#profile").text();
+    	if (profile == "Administrador"){
+    		var tabUsarios = $("#tabUsuarios");
+    		tabUsarios.css("display", "block");
+    		var btnAgregar = $("#btnAgregar");
+    		btnAgregar.css("display", "block");
+    		var btnEliminar = $("#btnEliminar");
+    		btnEliminar.css("display", "block");
+    	}
+    	$("#tabUsuarios").toggleClass("active");
+    }, 500);
 	
 	
 });
@@ -55,71 +69,14 @@ jQuery(document).ready(function($){
 <title>ToDoManager - Usuarios</title>
 
 </head>
-<style>
-.navbar-center {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	top: 0;
-	text-align: center;
-	margin: auto;
-	height: 100%;
-}
 
-.navbar-brand-img {
-	float: left;
-	height: 50px;
-	padding: 5px 5px;
-	font-size: 23px;
-	line-height: 20px
-}
-</style>
 <body>
 
 	<div id="wrapper">
-
-		<!-- Navigation -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<img class="navbar-brand-img" src="../images/photos/dtchLogo500W.png"
-					alt="Formacion Social"> <a class="navbar-center navbar-brand"
-					href="tareas.jsp">To Do Manager</a>
-			</div>
-			<!-- Top Menu Items -->
-			<ul class="nav navbar-right top-nav">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"><i class="fa fa-user"></i> <%=username%>
-						<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="cambiarClave.jsp"><i class="fa fa-fw fa-gear"></i> Cambiar
-								contraseña</a></li>
-						<li class="divider"></li>
-						<li><a href="../LogoutServlet"><i
-								class="fa fa-fw fa-power-off"></i> Salir</a></li>
-					</ul></li>
-			</ul>
-			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav side-nav">
-					<li><a href="tareas.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Tareas</a></li>
-					<li class="active" style="display:none;" id="tabUsuarios"><a href="usuarios.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Usuarios</a></li>
-				</ul>
-			</div>
-			<!-- /.navbar-collapse -->
-		</nav>
+		<!-- Import de template.html -->
+		<div id="template"></div>
 		<div id="usersDiv">
-
 			<div class="container-fluid">
-
 				<!-- Page Heading -->
 				<div class="row">
 					<div class="col-lg-12">
@@ -163,5 +120,6 @@ jQuery(document).ready(function($){
 
 
 <label id="profile" style="display:none;"><%=profile%></label><br>
+<label id="username" style="display:none;"><%=username%></label><br>
 </body>
 </html>

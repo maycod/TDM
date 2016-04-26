@@ -7,6 +7,10 @@ public class User extends DotechDomain{
 	private Long profileId;
 	private String profileDesc;
 	private String creationDate;
+	private String codename;
+	private Boolean active;
+	private String userDesc;
+
 
 	public String getUsername() {
 		return username;
@@ -38,5 +42,22 @@ public class User extends DotechDomain{
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
-
+	public String getCodename() {
+		return codename;
+	}
+	public void setCodename(String codename) {
+		this.codename = codename;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+	public String getUserDesc() {
+		return userDesc;
+	}
+	public void setUserDesc(String userDesc) {
+		this.userDesc = userDesc;
+	}
 }

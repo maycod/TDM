@@ -9,7 +9,12 @@ public class Task extends DotechDomain{
 	private Integer parentTaskId;
 	private Integer level;
 	private Long responsibleId;
+	private String responsibleName;
+	private Integer timeBudget;
+	private Integer status;
+	private Boolean active;
 	
+
 	public String getTaskName() {
 		return taskName;
 	}
@@ -51,6 +56,30 @@ public class Task extends DotechDomain{
 	}
 	public void setResponsibleId(Long responsibleId) {
 		this.responsibleId = responsibleId;
+	}
+	public String getResponsibleName() {
+		return responsibleName;
+	}
+	public void setResponsibleName(String responsibleName) {
+		this.responsibleName = responsibleName;
+	}
+	public Integer getTimeBudget() {
+		return timeBudget;
+	}
+	public void setTimeBudget(Integer timeBudget) {
+		this.timeBudget = timeBudget;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 	
 	

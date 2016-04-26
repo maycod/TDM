@@ -8,7 +8,7 @@ tdm.UsersDetailView = Backbone.View.extend({
 		self.users = new tdm.Users();
 
 		self.modelBinder = new Backbone.ModelBinder();
-		_.bindAll(this, 'onGuardarClick', 'onEditarClick');
+		_.bindAll(this, 'onGuardarClick', 'onEditarClick','createMask');
 		self.loadUsersById();
 		
 	},
@@ -36,7 +36,7 @@ tdm.UsersDetailView = Backbone.View.extend({
 			iosOverlay({
 				text: "Nombre de Usuario Inv&aacute;lido.",
 				duration: 2e3,
-				icon: "../images/photos/logo43.png"
+				icon: "../images/photos/dtchLogo125W.png"
 			});
 			return false;
 		}
@@ -45,32 +45,38 @@ tdm.UsersDetailView = Backbone.View.extend({
 	onGuardarClick : function(e, callback) {
 		var self = this;
 		if (self.validateFields()){
-			self.maskEl.mask("Guardando...");
+			var mask = self.createMask("Guardando...");
 			var user = new tdm.User();
 			
 			var idUserAdm = $("#idUser")[0].innerHTML; 
 			var usernameAdm = $("#usernameAdm")[0].value; 
 			var profileIdAdm = $("#profileDescAdm").val(); 
-			
+			var userDescAdm = $("#userDescAdm")[0].value; 
+			var codenameAdm = $("#codenameAdm")[0].value; 
+			var activeAdm = $("#activeAdm")[0]; 
+
 			user.set('id', idUserAdm); 
 			user.set('username', usernameAdm); 
-			user.set('profileId', profileIdAdm); 
+			user.set('profileId', profileIdAdm);
+			user.set('codename', codenameAdm); 
+			user.set('userDesc', userDescAdm);
+			user.set('active', activeAdm.checked);
 			
 			user.save(user.attributes,{
 				 success:function(model, response, options){ 		
 					 	iosOverlay({
 							text: "Cambios Guardados.",
 							duration: 2e3,
-							icon: "../images/photos/logo43.png"
+							icon: "../images/photos/dtchLogo125W.png"
 						});
-					 	self.maskEl.unmask();
+					 	mask.hide();
 					 	window.location="usuarios.jsp";
 				 	}, error : function(model, response, options) {
-						self.maskEl.unmask();
+				 		mask.hide();
 						iosOverlay({
 							text: "Error en operaci&oacute;n.",
 							duration: 2e3,
-							icon: "../images/photos/logo43.png"
+							icon: "../images/photos/dtchLogo125W.png"
 						});
 				 	}
 				});
@@ -81,17 +87,18 @@ tdm.UsersDetailView = Backbone.View.extend({
 	},
 	onEditarClick : function(e, callback) {
 		var self = this;
-		self.maskEl.mask("Cargando...");
-		self.maskEl.unmask();
+		var mask = self.createMask("Cargando...");
 		var normalView = $("#detailInfoDivUsr");
 		var editarView = $("#detailInfoDivAdm");
 		
 		normalView.css("display", "none");
 		editarView.css("display", "block");
+		
+		mask.hide();
 	},
 	loadUsersById : function() {
 		var self = this;
-		self.maskEl.mask("Cargando...");
+		var mask = self.createMask("Cargando...");
 		var idUserLbl = $("#idUser");
 		var idUserStr = idUserLbl[0].innerHTML;
 		var idUserInt = parseInt(idUserStr);
@@ -105,6 +112,12 @@ tdm.UsersDetailView = Backbone.View.extend({
 				var data = collection.models[0].attributes;
 				var usernameUsr = $("#usernameUsr")[0];
 				usernameUsr.innerHTML = data.username;
+				var codenameUsr = $("#codenameUsr")[0];
+				codenameUsr.innerHTML = data.codename;
+				var userDescUsr = $("#userDescUsr")[0];
+				userDescUsr.innerHTML = data.userDesc;
+				var activeUsr = $("#activeUsr")[0];
+				activeUsr.checked = data.active;
 				var profileDescUsr = $("#profileDescUsr")[0];
 				profileDescUsr.innerHTML = data.profileDesc;
 				var creationDateUsr = $("#creationDateUsr")[0];
@@ -113,19 +126,53 @@ tdm.UsersDetailView = Backbone.View.extend({
 				var data = collection.models[0].attributes;
 				var usernameAdm = $("#usernameAdm")[0];
 				usernameAdm.value = data.username;
+				var codenameUsr = $("#codenameAdm")[0];
+				codenameUsr.value = data.codename;
+				var userDescUsr = $("#userDescAdm")[0];
+				userDescUsr.value = data.userDesc;
+				var activeUsr = $("#activeAdm")[0];
+				activeUsr.checked = data.active;
 				var profileDescAdm = $("#profileDescAdm");
 				profileDescAdm.val(data.profileId);
 				self.render();
-				self.maskEl.unmask();
+				mask.hide();
 				
 			},
 			error : function() {
-				self.maskEl.unmask();
+				mask.hide();
 				console.log("Error while loading Users");
 			}
 		});
 		
 		
+	},
+	createMask : function(message){
+		self = this;
+		var opts = {
+			lines: 13, // The number of lines to draw
+			length: 11, // The length of each line
+			width: 5, // The line thickness
+			radius: 17, // The radius of the inner circle
+			corners: 1, // Corner roundness (0..1)
+			rotate: 0, // The rotation offset
+			color: '#FFF', // #rgb or #rrggbb
+			speed: 1, // Rounds per second
+			trail: 60, // Afterglow percentage
+			shadow: false, // Whether to render a shadow
+			hwaccel: false, // Whether to use hardware acceleration
+			className: 'spinner', // The CSS class to assign to the spinner
+			zIndex: 2e9, // The z-index (defaults to 2000000000)
+			top: 'auto', // Top position relative to parent in px
+			left: 'auto' // Left position relative to parent in px
+		};
+		var target = document.createElement("div");
+		document.body.appendChild(target);
+		var spinner = new Spinner(opts).spin(target);
+		var mask=iosOverlay({
+			text: message,
+			spinner: spinner
+		});
+		return mask;
 	},
 	clear : function() {
 		var self = this;

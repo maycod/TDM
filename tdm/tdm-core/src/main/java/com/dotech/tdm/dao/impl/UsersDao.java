@@ -28,13 +28,18 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 				user.setUsername(rs.getString("CVE_USUARIO"));
 				user.setProfileId(new Long (rs.getLong("ID_TIPO_USUARIO")));
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
-				user.setCreationDate(rs.getString("FECHA_CREACION"));
+				user.setCodename(rs.getString("CVE_RESPONSABLE"));
+				user.setUserDesc(rs.getString("DESC_USUARIO"));
 			}else if(TdmConstants.SP_GET_USER_BY_ID.equals(procName)){
 				user.setId(new Long (rs.getLong("ID_USUARIO")));
 				user.setUsername(rs.getString("CVE_USUARIO"));
 				user.setProfileId(new Long (rs.getLong("ID_TIPO_USUARIO")));
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 				user.setCreationDate(rs.getString("FECHA_CREACION"));
+				user.setCodename(rs.getString("CVE_RESPONSABLE"));
+				user.setUserDesc(rs.getString("DESC_USUARIO"));
+				boolean active = rs.getInt("ACTIVO")==1;
+				user.setActive(new Boolean(active));
 			}if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 			}else if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)|| DotechConstants.SP_ELIMINAR.equals(procName) || TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){
@@ -80,8 +85,11 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 		sspdefa.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_ADD_USER);	
 		sspdefa.addInParam("userId", OracleTypes.NUMBER);
 		sspdefa.addInParam("username", OracleTypes.VARCHAR);
+		sspdefa.addInParam("codename", OracleTypes.VARCHAR);
+		sspdefa.addInParam("userDesc", OracleTypes.VARCHAR);
 		sspdefa.addInParam("profileId", OracleTypes.NUMBER);
 		sspdefa.addInParam("userModify", OracleTypes.VARCHAR);
+		sspdefa.addInParam("active", OracleTypes.NUMBER);
 		sspdefa.setReturnsCursor(false);
 		
 		procedures.put(DotechConstants.SP_GRABAR, sspdefa);
@@ -142,7 +150,16 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 		if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)){
 			inParams.put("userId", u.getId());
 			inParams.put("username", u.getUsername());
+			inParams.put("codename",u.getCodename());
+			inParams.put("userDesc", u.getUserDesc());
 			inParams.put("profileId", u.getProfileId());
+			int activeVal = 0; 
+			if(u.getActive()!=null){
+				if (u.getActive().booleanValue()){
+					activeVal=1;
+				}					
+			}
+			inParams.put("active",new Integer(activeVal));
 			inParams.put("userModify",null);
 		}else if(DotechConstants.SP_CONSULTAR.equals(procName)){
 			

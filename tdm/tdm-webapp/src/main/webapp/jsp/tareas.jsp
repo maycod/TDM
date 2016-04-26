@@ -1,49 +1,51 @@
 <!-- Verificar que la sesion sea valida -->
 <%@ page import="java.io.*,java.util.*,javax.servlet.http.HttpSession"%>
 <%
-	session=request.getSession();  
-	String  username = (String)session.getAttribute("username");
-	if (username == null){
-		response.sendRedirect("../login.jsp");	
+	session = request.getSession();
+	String username = (String) session.getAttribute("username");
+	if (username == null) {
+		response.sendRedirect("../login.jsp");
 	}
-	String  profile = (String)session.getAttribute("profile");
-
+	String profile = (String) session.getAttribute("profile");
 %>
 <html lang="en">
 <head>
 
-<link rel="import" href="includes.html" >
+<link rel="import" href="includes.html">
 
 <script type="text/javascript">
+	var tasksView;
+	var tdm = {};
 
-var usersView;
-var tdm = {};
+	$(document).ready(
+			function($) {
 
-jQuery(document).ready(function($){
-	
-	
-	$.ajaxSetup({
-		cache: false,
-	    beforeSend: function (xhr)
-	    {
-	       xhr.setRequestHeader("Content-Type","application/json;charset=utf-8");	              
-	    }
-	});
-	//usersView = new tdm.UsersView();
-	
-	var profile = $("#profile")[0].innerHTML;
-	if (profile == "Administrador"){
-		var tabUsarios = $("#tabUsuarios");
-		tabUsarios.css("display", "block");
-		var btnAgregar = $("#btnAgregar");
-		btnAgregar.css("display", "block");
-		var btnEliminar = $("#btnEliminar");
-		btnEliminar.css("display", "block");
-	}
-	
-	
-	
-});
+				$('#template').load('template.html');
+				$.ajaxSetup({
+					cache : false,
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("Content-Type",
+								"application/json;charset=utf-8");
+					}
+				});
+				tasks = new tdm.TasksView();
+				setTimeout(function() {
+					var username = $("#username").text();
+					$("#usernameNavBar").append(username);
+					console.log("test");
+					var profile = jQuery("#profile").text();
+					if (profile == "Administrador") {
+						var tabUsarios = $("#tabUsuarios");
+						tabUsarios.css("display", "block");
+						var btnAgregar = $("#btnAgregar");
+						btnAgregar.css("display", "block");
+						var btnEliminar = $("#btnEliminar");
+						btnEliminar.css("display", "block");
+					}
+					$("#tabTareas").toggleClass("active");
+				}, 500);
+
+			});
 </script>
 
 <meta charset="utf-8">
@@ -55,71 +57,16 @@ jQuery(document).ready(function($){
 <title>ToDoManager - Tareas</title>
 
 </head>
-<style>
-.navbar-center {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	top: 0;
-	text-align: center;
-	margin: auto;
-	height: 100%;
-}
 
-.navbar-brand-img {
-	float: left;
-	height: 50px;
-	padding: 5px 5px;
-	font-size: 23px;
-	line-height: 20px
-}
-</style>
 <body>
 
 	<div id="wrapper">
-
-		<!-- Navigation -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<img class="navbar-brand-img" src="../images/photos/dtchLogo500W.png"
-					alt="Formacion Social"> <a class="navbar-center navbar-brand"
-					href="tareas.jsp">To Do Manager</a>
-			</div>
-			<!-- Top Menu Items -->
-			<ul class="nav navbar-right top-nav">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"><i class="fa fa-user"></i> <%=username%>
-						<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="cambiarClave.jsp"><i class="fa fa-fw fa-gear"></i> Cambiar
-								contraseña</a></li>
-						<li class="divider"></li>
-						<li><a href="../LogoutServlet"><i
-								class="fa fa-fw fa-power-off"></i> Salir</a></li>
-					</ul></li>
-			</ul>
-			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav side-nav">
-					<li class="active"><a href="tareas.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Tareas</a></li>
-					<li  style="display:none;" id="tabUsuarios"><a href="usuarios.jsp"><i
-							class="fa fa-fw fa-bar-chart-o"></i>Usuarios</a></li>
-				</ul>
-			</div>
-			<!-- /.navbar-collapse -->
-		</nav>
-		<div id="usersDiv">
-
+		<!-- Import de template.html -->
+		<div id="template"></div>
+		
+		<!-- #tasksDiv -->
+		<div id="tasksDiv" style="position: relative;left: 3%;">
 			<div class="container-fluid">
-
 				<!-- Page Heading -->
 				<div class="row">
 					<div class="col-lg-12">
@@ -130,38 +77,134 @@ jQuery(document).ready(function($){
 				</div>
 				<!-- /.row -->
 			</div>
-			<div>
-				 <button type="button" class="btn btn-default btn-sm" style="float:right;display:none;" id="btnEliminar">
-		          <span class="glyphicon glyphicon-trash"></span>Eliminar
-		        </button>
-				<button type="button" class="btn btn-default btn-sm" style="float:right;display:none;" onclick="location.href='usuarioAgregar.jsp';" id="btnAgregar">
-		          <span class="glyphicon glyphicon-plus"></span>Agregar
-		        </button>
-			</div>
-			<!-- /.container-fluid -->
-			<div class ="row" id="filtersContainer">
-			<table style="width:80%">
-			  <tr>
-			    <td style="width:25%"><div id="filter1"></div></td>
-			    <td style="width:25%"><div id="filter2"></div></td> 
-			    <td style="width:25%"><div id="filter3"></div></td>
-			  </tr>
-			</table>
-			</div>
-			<div class="backgrid-container" id="usersTable"></div>
-		</div>
-		<!-- /#page-wrapper -->
 
+			<!-- /.container-fluid -->
+			<div class="row" style="width: 100%;">
+				<!-- #taskTreeContainer -->
+				<div id="taskTreeContainer" class="col-sm-4 jumbotron"
+					style="width: 30%; padding-top: 10px">
+					<div style="padding-right: 4%;">
+						<button type="button" class="btn btn-default btn-sm"
+							style="float: right; display: none;" id="btnEliminar">
+							<span class="glyphicon glyphicon-trash"></span>Eliminar
+						</button>
+						<button type="button" class="btn btn-default btn-sm"
+							style="float: right; display: none;"
+							id="btnAgregar">
+							<span class="glyphicon glyphicon-plus"></span>Agregar
+						</button>
+					</div>
+					<div style="min-height:35px;"></div>
+					<div id="jqxTree"
+						style="overflow-y: scroll !important; padding-top: 10px !important;"></div>
+				</div>
+				<!-- /#taskTreeContainer -->
+				<div class="col-sm-1" style="width: 6%;"></div>
+				<label id="taskId" style="display: none;"></label>
+				<label id="parentTaskId" style="display: none;"></label>
+				<!-- #taskDetailAdm -->
+				<div id="taskDetailAdm" class="col-sm-5 jumbotron"
+					style="width: 60%; display:none;">
+					<h3 style="text-align: center;">Información Detallada de Tarea</h3>
+					<div style="width: 70%; margin: 0 auto;">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 20%;">Clave:</th>
+									<td> <input
+										type="text" class="form-control" id="taskNameAdm"></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Nombre:</th>
+									<td><input type="text" class="form-control"
+										id="taskDescAdm"></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Observaciones:</th>
+									<td><input type="text" class="form-control"
+										id="observationsAdm"></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Responsable:</th>
+									<td><input type="text" class="form-control"
+										id="responsibleIdAdm"></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Horas Presupuestadas:</th>
+									<td><input type="text" class="form-control"
+										id="timeBudgetAdm"></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Activo:</th>
+									<td><input type="checkbox" value="" id="activeAdm">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<button type="button" class="btn btn-default btn-sm"
+							style="float: right;" id="btnGuardar">
+							<span class="glyphicon glyphicon-floppy-disk"></span>Guardar
+						</button>
+					</div>
+				</div>
+				<!-- /#taskDetailAdm -->
+				<!-- #taskDetailUsr -->
+				<div id="taskDetailUsr" class="col-sm-5 jumbotron"
+					style="width: 60%;display:none;">
+					<button type="button" class="btn btn-default btn-sm" style="float:right;" id="btnEditar">
+			          <span class="glyphicon glyphicon-edit"></span>Editar
+			        </button>
+					<h3 style="text-align: center;">Información Detallada de Tarea</h3>
+					<div style="width: 70%; margin: 0 auto;">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 20%;">Clave:</th>
+									<td>
+									<label id="taskNameUsr"></label>
+									 </td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Nombre:</th>
+									<td><label id="taskDescUsr"></label></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Observaciones:</th>
+									<td><label id="observationsUsr"></label></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Responsable:</th>
+									<td><label id="responsibleIdUsr"></label></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Horas Presupuestadas:</th>
+									<td><label id="timeBudgetUsr"></label></td>
+								</tr>
+								<tr>
+									<th style="width: 20%;">Activo:</th>
+									<td><input type="checkbox" value="" id="activeUsr" disabled>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /#taskDetailUsr -->
+			</div>
+		</div>
+		<!-- /#tasksDiv -->
 	</div>
 	<!-- /#wrapper -->
 
 	<!-- Modelos -->
 	<script type="text/javascript" src="../js/app/Constantes.js"></script>
-	<script type="text/javascript" src="../js/app/model/User.js"></script>
-	<script type="text/javascript" src="../js/app/view/usersView.js"></script>
+	<script type="text/javascript" src="../js/app/model/Task.js"></script>
+	<script type="text/javascript" src="../js/app/view/tasksView.js"></script>
 	<script type="text/javascript" src="../js/nobackspace.js"></script>
 
 
-<label id="profile" style="display:none;"><%=profile%></label><br>
-</body>
+	<label id="profile" style="display: none;"><%=profile%></label>
+	<label id="username" style="display: none;"><%=username%></label>
+	<div style="display:none;"><img src="../images/photos/dtchLogo125W.png"></img></div>
+	</body>
 </html>
