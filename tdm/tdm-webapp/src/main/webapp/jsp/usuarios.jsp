@@ -7,6 +7,8 @@
 		response.sendRedirect("../login.jsp");	
 	}
 	String  profile = (String)session.getAttribute("profile");
+	Integer profileId = (Integer) session.getAttribute("profileId");
+	Integer userId = (Integer) session.getAttribute("userId");
 
 %>
 <html lang="en">
@@ -120,6 +122,8 @@ $(document).ready(function($){
 
 
 <label id="profile" style="display:none;"><%=profile%></label><br>
+<label id="profileId" style="display: none;"><%=profileId%></label>
 <label id="username" style="display:none;"><%=username%></label><br>
+<label id="userId" style="display: none;"><%=userId%></label>
 </body>
 </html>

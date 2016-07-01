@@ -1,8 +1,10 @@
 package com.dotech.tdm;
 
 import java.io.IOException;  
-import java.io.PrintWriter;  
-  
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+
 import javax.servlet.ServletException;  
 import javax.servlet.http.HttpServlet;  
 import javax.servlet.http.HttpServletRequest;  
@@ -32,6 +34,8 @@ import java.util.ResourceBundle;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import java.security.*;
+
 public class LoginServlet extends HttpServlet { 
 	ResourceBundle connData = ResourceBundle.getBundle("Connections");
     String ipServer = connData.getString("ipServer");
@@ -40,7 +44,7 @@ public class LoginServlet extends HttpServlet {
     String usernameServer = connData.getString("usernameServer");
     String passwordServer = connData.getString("passwordServer");
 	
-	public String validateUser(String username, String password) throws DotechException, ClassNotFoundException, SQLException{
+	public String validateUser(String username, String password) throws DotechException, ClassNotFoundException, SQLException, UnsupportedEncodingException, NoSuchAlgorithmException{
 		ResultSet rs = null;
 		
 		Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -57,9 +61,14 @@ public class LoginServlet extends HttpServlet {
         //Se inicializa un CallableStatement para realizar la llamada al SP pertinente con sus respectivos parametros de entrada.
         CallableStatement staOra = connectionOra.prepareCall("{call "+spCall+"}", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         
+        //Se encripata la contrasena a validar
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(password.getBytes());
+        BigInteger hash = new BigInteger(1, md5.digest());
+        String encryptedPassword = hash.toString(password.length());
         //Se registran parametros de entrada.
         staOra.setString(1, username);
-        staOra.setString(2, password);
+        staOra.setString(2, encryptedPassword);
         staOra.registerOutParameter(3, OracleTypes.CURSOR);
         //Se ejecuta el SP
         staOra.execute();
@@ -67,9 +76,13 @@ public class LoginServlet extends HttpServlet {
         rs = (ResultSet) staOra.getObject(3);
         
         String profile = null;
+        Integer profileId = null;
+        Integer userId = null;
         if (rs.next())
         {
         	profile = rs.getString("DESC_TIPO_USUARIO");
+        	profileId = new Integer(rs.getInt("ID_TIPO_USUARIO"));
+        	userId = new Integer(rs.getInt("ID_USUARIO"));
         }
 		
         return profile;
@@ -97,7 +110,7 @@ public class LoginServlet extends HttpServlet {
 	        }  
 	        else{  
 	            response.sendRedirect("login.jsp");
-	            session.setAttribute("mensajeError","Credenciales incorrectas. Favor de intentar nuevamente.");
+	            session.setAttribute("mensajeError","Credenciales Inválidas.");
 	            //request.getRequestDispatcher("login.jsp").include(request, response);  
 	        }  
 	        out.close();  
@@ -117,6 +130,9 @@ public class LoginServlet extends HttpServlet {
         	HttpSession session=request.getSession();
             session.setAttribute("mensajeError","Error de conexión. Favor de intentar mas tarde.");
 			e.printStackTrace();
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         

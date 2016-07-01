@@ -155,7 +155,6 @@ tdm.UsersView = Backbone.View.extend({
 	loadUsers : function() {
 		var self = this;
 		var mask = self.createMask("Cargando...");
-		
 		self.users.fetch({
 			data : {
 			},

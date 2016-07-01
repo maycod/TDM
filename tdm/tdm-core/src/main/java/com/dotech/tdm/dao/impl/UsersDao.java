@@ -15,6 +15,8 @@ import com.dotech.tdm.exceptions.DotechException;
 
 import oracle.jdbc.OracleTypes;
 
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+
 
 public class UsersDao extends DotechDaoSupport implements IUsersDao{
 	
@@ -40,7 +42,9 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 				user.setUserDesc(rs.getString("DESC_USUARIO"));
 				boolean active = rs.getInt("ACTIVO")==1;
 				user.setActive(new Boolean(active));
-			}if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
+			}else if(TdmConstants.SP_GET_LIST_USERS_BY_TASK.equals(procName)){
+				user.setId(new Long (rs.getLong("ID_RESPONSABLE")));
+			}else if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
 				user.setProfileDesc(rs.getString("DESC_TIPO_USUARIO"));
 			}else if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)|| DotechConstants.SP_ELIMINAR.equals(procName) || TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){
 				//
@@ -59,6 +63,7 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 		
 		DotechSPDef sspdefc = new DotechSPDef();
 		sspdefc.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_GET_LIST_USERS);
+		sspdefc.addInParam("profileId", OracleTypes.NUMBER);
 		sspdefc.setReturnsCursor(true);
 		sspdefc.addOutParam("c_resultados", OracleTypes.CURSOR);
 		
@@ -80,6 +85,14 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 		sspdefc2.addOutParam("c_resultados", OracleTypes.CURSOR);
 
 		procedures.put(TdmConstants.SP_VALIDATE_USER, sspdefc2);
+		
+		DotechSPDef sspdefc3 = new DotechSPDef();
+		sspdefc3.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_GET_LIST_USERS_BY_TASK);
+		sspdefc3.addInParam("taskId", OracleTypes.NUMBER);
+		sspdefc3.setReturnsCursor(true);
+		sspdefc3.addOutParam("c_resultados", OracleTypes.CURSOR);
+
+		procedures.put(TdmConstants.SP_GET_LIST_USERS_BY_TASK, sspdefc3);
 		
 		DotechSPDef sspdefa = new DotechSPDef();
 		sspdefa.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_ADD_USER);	
@@ -127,10 +140,14 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 				 result = executeProcedure(DotechConstants.SP_CONSULTAR, ((DotechDomain)params));
 			 }else if(sd.getConsulta().equals("C1")){
 				 result = executeProcedure(TdmConstants.SP_GET_USER_BY_ID, ((DotechDomain)params));
+			 }else if(sd.getConsulta().equals("C1")){
+				 result = executeProcedure(TdmConstants.SP_GET_USER_BY_ID, ((DotechDomain)params));
 			 }else if(sd.getConsulta().equals("C2")){
 				 result = executeProcedure(TdmConstants.SP_VALIDATE_USER, ((DotechDomain)params));
 			 }else if(sd.getConsulta().equals("C3")){
 				 result = executeProcedure(TdmConstants.SP_UPDATE_USER_PASSWORD, ((DotechDomain)params));
+			 }else if(sd.getConsulta().equals("C4")){
+				 result = executeProcedure(TdmConstants.SP_GET_LIST_USERS_BY_TASK, ((DotechDomain)params));
 			 }else if(sd.getConsulta().equals("DEL")){
 				 result = executeProcedure(DotechConstants.SP_ELIMINAR, ((DotechDomain)params));
 			 }
@@ -162,18 +179,25 @@ public class UsersDao extends DotechDaoSupport implements IUsersDao{
 			inParams.put("active",new Integer(activeVal));
 			inParams.put("userModify",null);
 		}else if(DotechConstants.SP_CONSULTAR.equals(procName)){
+			inParams.put("profileId", u.getProfileId());
 			
 		}else if(DotechConstants.SP_ELIMINAR.equals(procName)){			
 			inParams.put("userId", u.getId());
 			inParams.put("userModify",null);
 		}else if(TdmConstants.SP_GET_USER_BY_ID.equals(procName)){			
 			inParams.put("userId", u.getId());
-		}else if(TdmConstants.SP_VALIDATE_USER.equals(procName)){			
+		}else if(TdmConstants.SP_GET_LIST_USERS_BY_TASK.equals(procName)){			
+			inParams.put("taskId", u.getId());
+		}else if(TdmConstants.SP_VALIDATE_USER.equals(procName)){
+			StandardPasswordEncoder encoder = new StandardPasswordEncoder("dtch3010");
+			String encryptedPassword = encoder.encode( u.getPassword());
 			inParams.put("username", u.getUsername());
-			inParams.put("password", u.getPassword());
-		}else if(TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){			
+			inParams.put("password", encryptedPassword);
+		}else if(TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){	
+			StandardPasswordEncoder encoder = new StandardPasswordEncoder("dtch3010");
+			String encryptedPassword = encoder.encode( u.getPassword());
 			inParams.put("username", u.getUsername());
-			inParams.put("password", u.getPassword());
+			inParams.put("password", encryptedPassword);
 		}
 
 		return inParams;

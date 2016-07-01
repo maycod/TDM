@@ -82,7 +82,7 @@ $( document ).ready( function(){
 <body style="margin-top:0px;">
 	 <!-- jQuery/Bootstrap login window -->
     <div id="wrapper">
-      <img src="images/photos/dtchLogo500W.png" class="img-responsive" style="margin-left: 14%; max-width: 70%;" alt="Logo" width="1000" height="500">
+      <img src="images/photos/dtchLogo500B.png" class="img-responsive" style="margin-left: 14%; max-width: 70%;" alt="Logo" width="1000" height="500">
       <br>
       <div id="loginWindow">
         <div class="page-header">
@@ -98,7 +98,7 @@ $( document ).ready( function(){
 	          <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id="inputPassword" name="inputPassword">
 	        </div>
 	        <button class="btn btn-lg btn-danger" type="submit">Submit</button>
-	        <label id= "labelError" style="text-align:center; color:rgb(204, 0, 0);"><%=mensajeError%></label>
+	        <label id= "errorMsgLbl" style="display:none;text-align:center; color:rgb(204, 0, 0);"><%=mensajeError%></label>
 	        
         </form>
       </div>

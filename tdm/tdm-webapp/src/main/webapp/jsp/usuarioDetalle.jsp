@@ -8,6 +8,8 @@
 	}
 	String  profile = (String)session.getAttribute("profile");
 	String  idUser = (String)request.getParameter("id");
+	Integer profileId = (Integer) session.getAttribute("profileId");
+	Integer userId = (Integer) session.getAttribute("userId");
 	
 %>
 <html lang="en">
@@ -190,7 +192,9 @@ $(document).ready(function($){
 
 
 <label id="profile" style="display:none;"><%=profile%></label>
+<label id="profileId" style="display: none;"><%=profileId%></label>
 <label id="username" style="display:none;"><%=username%></label>
+<label id="userId" style="display: none;"><%=userId%></label>
 <div style="display:none;"><img src="../images/photos/dtchLogo125W.png"></img></div>
 </body>
 </html>

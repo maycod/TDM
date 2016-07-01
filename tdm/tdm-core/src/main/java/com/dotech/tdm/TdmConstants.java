@@ -6,6 +6,7 @@ public class TdmConstants {
 	
 	//GETS
 	public static final String SP_GET_LIST_USERS = "SP_GET_LIST_USERS";
+	public static final String SP_GET_LIST_USERS_BY_TASK = "SP_GET_LIST_USERS_BY_TASK";
 	public static final String SP_GET_LIST_TASKS = "SP_GET_LIST_TASKS";
 
 	
@@ -18,12 +19,14 @@ public class TdmConstants {
 	//ADDS
 	public static final String SP_ADD_USER = "SP_ADD_USER";
 	public static final String SP_ADD_TASK = "SP_ADD_TASK";
-
+	public static final String SP_ADD_REL_ASG_TASKS = "SP_ADD_REL_ASG_TASKS";
 
 	
 	//DELS
 	public static final String SP_DEL_USER = "SP_DEL_USER";
 	public static final String SP_DEL_TASK = "SP_DEL_TASK";
+	public static final String SP_DEL_REL_ASG_TASKS = "SP_DEL_REL_ASG_TASKS";
+
 
 
 	

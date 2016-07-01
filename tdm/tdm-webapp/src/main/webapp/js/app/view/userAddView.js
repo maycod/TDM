@@ -23,14 +23,32 @@ tdm.UserAddView = Backbone.View.extend({
 		this.undelegateEvents();
 		this.remove();
 	},
-	validateFields: function(){
+	validate: function(username,userDesc, codename){
 		var self = this;
 		
-		var usernameAdm = $("#usernameAdm")[0].value;
 		var usernameRegex = /^[a-zA-Z0-9\._]+$/;
-		if (!usernameRegex.test(usernameAdm)){
+		if (!usernameRegex.test(username)){
 			iosOverlay({
-				text: "Nombre de Usuario Inv&aacute;lido.",
+				text: " Formato de Clave de Usuario Inv&aacute;lido.",
+				duration: 2e3,
+				icon: "../images/photos/dtchLogo125W.png"
+			});
+			return false;
+		}
+		
+		var userDescRegex = /^[^+]{1,100}$/;
+		if (!userDescRegex.test(userDesc)){
+			iosOverlay({
+				text: "Formato de Nombre de Usuario Inv&aacute;lido.",
+				duration: 2e3,
+				icon: "../images/photos/dtchLogo125W.png"
+			});
+			return false;
+		}
+		var codenameRegex = /^[^+]{1,10}$/;
+		if (!codenameRegex.test(codename)){
+			iosOverlay({
+				text: "Formato de C&oacute;digo de Usuario Inv&aacute;lido.",
 				duration: 2e3,
 				icon: "../images/photos/dtchLogo125W.png"
 			});
@@ -40,17 +58,16 @@ tdm.UserAddView = Backbone.View.extend({
 	},
 	onGuardarClick : function(e, callback) {
 		var self = this;
-		if (self.validateFields()){
+		var idUserAdm =0; 
+		var usernameAdm = $("#usernameAdm")[0].value; 
+		var profileIdAdm = $("#profileDescAdm").val(); 
+		var userDescAdm = $("#userDescAdm")[0].value; 
+		var codenameAdm = $("#codenameAdm")[0].value; 
+		var activeAdm = $("#activeAdm")[0]; 
+		if (self.validate(usernameAdm,userDescAdm, codenameAdm )){
 			var mask=self.createMask("Guardando...");
 			var user = new tdm.User();
 			
-			var idUserAdm =0; 
-			var usernameAdm = $("#usernameAdm")[0].value; 
-			var profileIdAdm = $("#profileDescAdm").val(); 
-			var userDescAdm = $("#userDescAdm")[0].value; 
-			var codenameAdm = $("#codenameAdm")[0].value; 
-			var activeAdm = $("#activeAdm")[0]; 
-
 			user.set('id', idUserAdm); 
 			user.set('username', usernameAdm); 
 			user.set('profileId', profileIdAdm);

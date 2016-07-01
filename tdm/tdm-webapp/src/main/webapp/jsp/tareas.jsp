@@ -7,6 +7,8 @@
 		response.sendRedirect("../login.jsp");
 	}
 	String profile = (String) session.getAttribute("profile");
+	Integer profileId = (Integer) session.getAttribute("profileId");
+	Integer userId = (Integer) session.getAttribute("userId");
 %>
 <html lang="en">
 <head>
@@ -21,6 +23,7 @@
 			function($) {
 
 				$('#template').load('template.html');
+				$('#asignarModal').load('tareaAsignar.html');
 				$.ajaxSetup({
 					cache : false,
 					beforeSend : function(xhr) {
@@ -32,7 +35,6 @@
 				setTimeout(function() {
 					var username = $("#username").text();
 					$("#usernameNavBar").append(username);
-					console.log("test");
 					var profile = jQuery("#profile").text();
 					if (profile == "Administrador") {
 						var tabUsarios = $("#tabUsuarios");
@@ -85,6 +87,10 @@
 					style="width: 30%; padding-top: 10px">
 					<div style="padding-right: 4%;">
 						<button type="button" class="btn btn-default btn-sm"
+							style="float: left;" id="btnAsignar">
+							<span class="glyphicon glyphicon-share"></span>Asignar
+						</button>
+						<button type="button" class="btn btn-default btn-sm"
 							style="float: right; display: none;" id="btnEliminar">
 							<span class="glyphicon glyphicon-trash"></span>Eliminar
 						</button>
@@ -112,22 +118,17 @@
 								<tr>
 									<th style="width: 20%;">Clave:</th>
 									<td> <input
-										type="text" class="form-control" id="taskNameAdm"></td>
+										type="text" class="form-control" id="taskNameAdm" required></td>
 								</tr>
 								<tr>
 									<th style="width: 20%;">Nombre:</th>
 									<td><input type="text" class="form-control"
-										id="taskDescAdm"></td>
+										id="taskDescAdm" required></td>
 								</tr>
 								<tr>
 									<th style="width: 20%;">Observaciones:</th>
 									<td><input type="text" class="form-control"
 										id="observationsAdm"></td>
-								</tr>
-								<tr>
-									<th style="width: 20%;">Responsable:</th>
-									<td><input type="text" class="form-control"
-										id="responsibleIdAdm"></td>
 								</tr>
 								<tr>
 									<th style="width: 20%;">Horas Presupuestadas:</th>
@@ -174,7 +175,7 @@
 								</tr>
 								<tr>
 									<th style="width: 20%;">Responsable:</th>
-									<td><label id="responsibleIdUsr"></label></td>
+									<td><label id="responsibleNameUsr"></label></td>
 								</tr>
 								<tr>
 									<th style="width: 20%;">Horas Presupuestadas:</th>
@@ -195,16 +196,22 @@
 		<!-- /#tasksDiv -->
 	</div>
 	<!-- /#wrapper -->
-
+	<!-- #asignarModal -->
+	<div class="modal fade" id="asignarModal" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true"></div>
+     <!-- /#asignarModal -->
 	<!-- Modelos -->
 	<script type="text/javascript" src="../js/app/Constantes.js"></script>
 	<script type="text/javascript" src="../js/app/model/Task.js"></script>
+	<script type="text/javascript" src="../js/app/model/User.js"></script>
 	<script type="text/javascript" src="../js/app/view/tasksView.js"></script>
 	<script type="text/javascript" src="../js/nobackspace.js"></script>
 
 
 	<label id="profile" style="display: none;"><%=profile%></label>
+	<label id="profileId" style="display: none;"><%=profileId%></label>
 	<label id="username" style="display: none;"><%=username%></label>
+	<label id="userId" style="display: none;"><%=userId%></label>
 	<div style="display:none;"><img src="../images/photos/dtchLogo125W.png"></img></div>
 	</body>
 </html>

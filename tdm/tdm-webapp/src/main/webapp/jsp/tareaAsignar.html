@@ -1,0 +1,35 @@
+<!-- Modal -->
+<div class="modal-dialog">
+	<div class="modal-content">
+		<!-- Modal Header -->
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">
+				<span aria-hidden="true">&times;</span> <span class="sr-only">Close</span>
+			</button>
+			<h4 class="modal-title" id="myModalLabel">Asignar Personal a Tarea</h4>
+		</div>
+
+		<!-- Modal Body -->
+		<div class="modal-body" style="max-height: 300px">
+			<div class ="row" id="filtersContainer">
+			<table style="width:100%;margin: 0 auto;">
+			  <tr>
+			    <td style="width:25%"><div id="filter1"></div></td>
+			  </tr>
+			</table>
+			</div>
+			<div class="backgrid-container-modal" id="usersTable" style="overflow-y: scroll !important;max-height:240px"></div>
+		</div>
+
+		<!-- Modal Footer -->
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default btn-sm" style="float:right;" id="btnGuardarModal">
+		      	<span class="glyphicon glyphicon-floppy-disk"></span>Guardar
+		      </button>
+	      <button type="button" data-dismiss="modal" class="btn btn-default btn-sm" style="float:right;" id="btnCancelarModal">
+		      	<span class="glyphicon glyphicon-floppy-remove"></span>Cancelar
+		      </button>
+		</div>
+	</div>
+</div>
+

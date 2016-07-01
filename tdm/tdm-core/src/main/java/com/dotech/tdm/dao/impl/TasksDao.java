@@ -29,6 +29,8 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 				task.setTaskDesc(rs.getString("DESC_TAREA"));
 				task.setParentTaskId(new Integer(rs.getInt("ID_TAREA_PADRE")));
 				task.setStatus(new Integer(rs.getInt("ESTATUS")));
+				task.setLevel(new Integer(rs.getInt("NIVEL")));
+
 			
 			}else if(TdmConstants.SP_GET_LIST_TASKS_BY_USER.equals(procName)){
 				task.setId(new Long (rs.getLong("ID_TAREA")));
@@ -53,7 +55,9 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 				
 			}if(TdmConstants.SP_VALIDATE_TASK.equals(procName)){
 				task.setId(new Long (rs.getLong("VALOR")));
-			}else if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)|| DotechConstants.SP_ELIMINAR.equals(procName) || TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)){
+			}else if(DotechConstants.SP_GRABAR.equals(procName) || DotechConstants.SP_MODIFICAR.equals(procName)
+					|| DotechConstants.SP_ELIMINAR.equals(procName) || TdmConstants.SP_UPDATE_USER_PASSWORD.equals(procName)
+					|| TdmConstants.SP_ADD_REL_ASG_TASKS.equals(procName) || TdmConstants.SP_DEL_REL_ASG_TASKS.equals(procName)){
 				//
 			}
 		} catch (Exception e) {								
@@ -77,7 +81,7 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 		
 		DotechSPDef sspdefc1 = new DotechSPDef();
 		sspdefc1.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_GET_LIST_TASKS_BY_USER);
-		sspdefc1.addInParam("taskId", OracleTypes.NUMBER);
+		sspdefc1.addInParam("responsibleId", OracleTypes.NUMBER);
 		sspdefc1.setReturnsCursor(true);
 		sspdefc1.addOutParam("c_resultados", OracleTypes.CURSOR);
 
@@ -116,6 +120,15 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 		procedures.put(DotechConstants.SP_GRABAR, sspdefa);
 		procedures.put(DotechConstants.SP_MODIFICAR, sspdefa);
 				
+		DotechSPDef sspdefa1 = new DotechSPDef();
+		sspdefa1.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_ADD_REL_ASG_TASKS);	
+		sspdefa1.addInParam("userId", OracleTypes.NUMBER);
+		sspdefa1.addInParam("taskId", OracleTypes.NUMBER);
+		sspdefa1.addInParam("userModify", OracleTypes.VARCHAR);
+		sspdefa1.setReturnsCursor(false);
+		
+		procedures.put(TdmConstants.SP_ADD_REL_ASG_TASKS, sspdefa1);
+		
 		DotechSPDef sspdefe = new DotechSPDef();
 		sspdefe.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_DEL_TASK);
 		sspdefe.addInParam("taskId", OracleTypes.NUMBER);
@@ -124,10 +137,37 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 		
 		procedures.put(DotechConstants.SP_ELIMINAR, sspdefe);
 		
+		DotechSPDef sspdefe1 = new DotechSPDef();
+		sspdefe1.setName(DotechConstants.PACKAGE_NAME + TdmConstants.SP_DEL_REL_ASG_TASKS);
+		sspdefe1.addInParam("userId", OracleTypes.NUMBER);
+		sspdefe1.addInParam("taskId", OracleTypes.NUMBER);
+		sspdefe1.addInParam("userModify", OracleTypes.VARCHAR);
+		sspdefe1.setReturnsCursor(false);
+		
+		procedures.put(TdmConstants.SP_DEL_REL_ASG_TASKS, sspdefe1);
+		
 
 		
 
 		return procedures;
+	}
+	public Object agregar(Object params) throws DotechException {
+		Map result = null;
+		DotechDomain sd = (DotechDomain)params;
+		
+		 try {		
+			if(sd.getConsulta() == null){
+				result = executeProcedure(DotechConstants.SP_GRABAR, ((DotechDomain)params));		
+			}else if(sd.getConsulta().equals("C1")){
+				result = executeProcedure(TdmConstants.SP_ADD_REL_ASG_TASKS, ((DotechDomain)params));
+			}
+		} catch (DotechException e) {			
+			e.printStackTrace();
+			throw new DotechException(e);
+		}
+		 
+		 return result.get("c_resultados") != null?((List) result.get("c_resultados")).get(0):params;
+
 	}
 
 
@@ -143,6 +183,8 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 				 result = executeProcedure(TdmConstants.SP_GET_TASK_BY_ID, ((DotechDomain)params));
 			 }else if(sd.getConsulta().equals("DEL")){
 				 result = executeProcedure(DotechConstants.SP_ELIMINAR, ((DotechDomain)params));
+			 }else if(sd.getConsulta().equals("DEL2")){
+				 result = executeProcedure(TdmConstants.SP_DEL_REL_ASG_TASKS, ((DotechDomain)params));
 			 }
 			 
 		} catch (DotechException e) {			
@@ -174,6 +216,16 @@ public class TasksDao extends DotechDaoSupport implements ITasksDao{
 			}
 			inParams.put("active",new Integer(activeVal));
 			inParams.put("userModify", t.getUsuario());
+		}else if(TdmConstants.SP_ADD_REL_ASG_TASKS.equals(procName)){			
+			inParams.put("userId", t.getResponsibleId());
+			inParams.put("taskId", t.getId());
+			inParams.put("userModify", t.getUsuario());
+
+		}else if(TdmConstants.SP_DEL_REL_ASG_TASKS.equals(procName)){			
+			inParams.put("userId", t.getResponsibleId());
+			inParams.put("taskId", t.getId());
+			inParams.put("userModify", t.getUsuario());
+
 		}else if(DotechConstants.SP_CONSULTAR.equals(procName)){
 			
 		}else if(DotechConstants.SP_ELIMINAR.equals(procName)){			
